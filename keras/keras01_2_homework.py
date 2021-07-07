@@ -20,7 +20,7 @@ model.compile(loss='mse', optimizer='adam')
 
 model.fit(x, y, epochs=1000, batch_size=1)
 
-# 4. 평가, 예측
+# 4. 평가, 예측c
 loss = model.evaluate(x, y)
 ic('loss : ', loss)
 

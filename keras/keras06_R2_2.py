@@ -14,7 +14,6 @@ y = np.array([1, 2, 4, 3, 5])
 
 # 2. 모델
 model = Sequential()
-<<<<<<< HEAD
 model.add(Dense(5, input_dim=1))
 model.add(Dense(25))
 model.add(Dense(50))
@@ -22,31 +21,11 @@ model.add(Dense(100))
 model.add(Dense(50))
 model.add(Dense(25))
 model.add(Dense(13))
-=======
-model.add(Dense(10, input_dim=1))
-model.add(Dense(20))
-model.add(Dense(30))
-model.add(Dense(40))
-model.add(Dense(50))
-model.add(Dense(70))
-model.add(Dense(90))
-model.add(Dense(100))
-model.add(Dense(50))
-model.add(Dense(30))
-model.add(Dense(20))
-model.add(Dense(10))
-model.add(Dense(5))
->>>>>>> 5684ea406c488c0647d7efce87a95049fdf83cbe
 model.add(Dense(1))
 
 # 3. 컴파일, 훈련
 model.compile(loss='mse', optimizer='adam')
-
-<<<<<<< HEAD
 model.fit(x, y, epochs=500, batch_size=3000)
-=======
-model.fit(x, y, epochs=200, batch_size=1)
->>>>>>> 5684ea406c488c0647d7efce87a95049fdf83cbe
 
 # 4. 평가, 예측
 loss = model.evaluate(x, y)

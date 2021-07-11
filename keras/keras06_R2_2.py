@@ -15,6 +15,7 @@ y = np.array([1, 2, 4, 3, 5])
 # 2. 모델
 model = Sequential()
 model.add(Dense(5, input_dim=1))
+<<<<<<< HEAD
 model.add(Dense(25, activation='relu'))
 model.add(Dense(50, activation='relu'))
 model.add(Dense(100, activation='relu'))
@@ -26,6 +27,20 @@ model.add(Dense(1, activation='relu'))
 # 3. 컴파일, 훈련
 model.compile(loss='mse', optimizer='adam')
 model.fit(x, y, epochs=1000, batch_size=3000)
+=======
+model.add(Dense(25))
+model.add(Dense(50))
+model.add(Dense(100))
+model.add(Dense(50))
+model.add(Dense(25))
+model.add(Dense(13))
+model.add(Dense(1))
+
+# 3. 컴파일, 훈련
+model.compile(loss='mse', optimizer='adam')
+
+model.fit(x, y, epochs=500, batch_size=3000)
+>>>>>>> 0b48de6 ('test')
 
 # 4. 평가, 예측
 loss = model.evaluate(x, y)

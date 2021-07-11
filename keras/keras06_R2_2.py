@@ -36,6 +36,5 @@ ic('x의 예측값 : ', y_predict)
 r2 = r2_score(y, y_predict)  # y_test와 y_predict값을 통해 결정계수를 계산
 ic('R2 스코어 : ', r2)
 
-
 # 과제2
 # R2를 0.9 이상으로 올려라

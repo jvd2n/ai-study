@@ -35,7 +35,7 @@ model.fit(x, y, epochs=1000, batch_size=1)
 
 # 4. 평가, 예측
 loss = model.evaluate(x, y)
-ic('loss : ', loss)
+ic(loss)
 
 x_pred = np.array([[9]])
 # ic(x_pred.shape) # (1, 3)

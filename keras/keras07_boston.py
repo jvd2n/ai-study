@@ -25,13 +25,13 @@ x_train, x_test, y_train, y_test = train_test_split(x, y,
 ic(x_test, y_test)
 
 model = Sequential()
-model.add(Dense(506, input_dim=13))
-model.add(Dense(340, activation='relu'))
+model.add(Dense(10, input_dim=13))
 model.add(Dense(20, activation='relu'))
-model.add(Dense(20, activation='relu'))
-model.add(Dense(50, activation='relu'))
-model.add(Dense(40, activation='relu'))
 model.add(Dense(30, activation='relu'))
+model.add(Dense(20, activation='relu'))
+model.add(Dense(10, activation='relu'))
+model.add(Dense(5, activation='relu'))
+model.add(Dense(3, activation='relu'))
 model.add(Dense(1, activation='relu'))
 
 # 3. 컴파일, 훈련
@@ -50,4 +50,5 @@ ic(y_predict)
 r2 = r2_score(y_test, y_predict)  # y_test와 y_predict값을 통해 결정계수를 계산
 ic(r2)
 
-# 완료하시오!
+# loss: 15.07454776763916
+# r2: 0.8175371850113262

@@ -39,22 +39,22 @@ ic(x_test, y_test)
 
 # 2. 모델
 model = Sequential()
-model.add(Dense(5, input_dim=1))
+model.add(Dense(1, input_dim=1))
 model.add(Dense(10))
 model.add(Dense(10))
-model.add(Dense(4))
-model.add(Dense(4))
-model.add(Dense(4))
+model.add(Dense(10))
+model.add(Dense(10))
+model.add(Dense(10))
 model.add(Dense(1))
 
 # 3. 컴파일, 훈련
-model.compile(loss='mse', optimizer='adam')
+model.compile(loss='msle', optimizer='adam')
 
 model.fit(x_train, y_train, epochs=100, batch_size=1)
 
 # 4. 평가, 예측
 loss = model.evaluate(x_test, y_test)
-ic('loss : ', loss)
+ic(loss)
 
 y_predict = model.predict(x_test) # x_test를 훈련시킨 값으로
 ic('x_test의 예측값 : ', y_predict)
@@ -64,4 +64,7 @@ ic('x_test의 예측값 : ', y_predict)
 from sklearn.metrics import r2_score
 
 r2 = r2_score(y_test, y_predict)  # y_test와 y_predict값을 통해 결정계수를 계산
-ic('R2 스코어 : ', r2)
+ic(r2)
+
+# 
+# 

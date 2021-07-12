@@ -40,15 +40,15 @@ ic(x_test, y_test)
 # 2. 모델
 model = Sequential()
 model.add(Dense(1, input_dim=1))
-model.add(Dense(10))
-model.add(Dense(10))
-model.add(Dense(10))
-model.add(Dense(10))
-model.add(Dense(10))
+model.add(Dense(10, activation='relu'))
+model.add(Dense(10, activation='selu'))
+model.add(Dense(5, activation='relu'))
+model.add(Dense(5, activation='selu'))
+model.add(Dense(3, activation='selu'))
 model.add(Dense(1))
 
 # 3. 컴파일, 훈련
-model.compile(loss='msle', optimizer='adam')
+model.compile(loss='mse', optimizer='adam')
 
 model.fit(x_train, y_train, epochs=100, batch_size=1)
 
@@ -66,5 +66,5 @@ from sklearn.metrics import r2_score
 r2 = r2_score(y_test, y_predict)  # y_test와 y_predict값을 통해 결정계수를 계산
 ic(r2)
 
-# 
-# 
+# loss: 695.5413818359375
+# r2: 0.2045339634281732

@@ -66,16 +66,16 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.9, random
 # print("best optimizer : ", opt[index],", best activation : ",act[index],", r2score : ", r2score[index])
 
 model = Sequential()
-model.add(Dense(256, input_shape=(10,),activation='selu')) 
-model.add(Dense(230,activation='selu'))
-model.add(Dense(190,activation='selu'))
-model.add(Dense(140,activation='selu'))
-model.add(Dense(130,activation='selu'))
+model.add(Dense(256, activation='selu', input_shape=(10,))) 
+model.add(Dense(256, activation='selu'))
+model.add(Dense(128, activation='selu'))
+model.add(Dense(64, activation='selu'))
+model.add(Dense(32, activation='selu'))
 model.add(Dense(1))
 
 # 3. 컴파일, 훈련
 model.compile(loss='mse', optimizer='adam')
-model.fit(x_train, y_train, epochs=100, batch_size=32, validation_split=0.01, shuffle=True)
+model.fit(x_train, y_train, epochs=100, batch_size=32, validation_split=0.02, shuffle=True)
 
 # 4. 평가, 예측
 # mse, R2 -> R2 값을 1에 가깝게

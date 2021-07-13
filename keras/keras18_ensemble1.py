@@ -39,8 +39,7 @@ output2 = Dense(12, name='output2')(dense14)
 
 from tensorflow.keras.layers import concatenate, Concatenate
 # merge1 = concatenate([output1, output2])
-merge1 = Concatenate()([output1, output2])
-# merge1 = Concatenate([output1, output2])
+merge1 = Concatenate(axis=1)([output1, output2])
 merge2 = Dense(10)(merge1)
 merge3 = Dense(5, activation='relu')(merge2)
 last_output = Dense(1)(merge3)
@@ -70,3 +69,4 @@ print("metrics['mae'] : ", results[1])
 #2 train_size의 디폴트 찾기
 #3 평균값과 중위값의 차이
 #4 Concatenate로 바꿔 코딩 하시오
+# merge1 = Concatenate(axis=1)([output1, output2])

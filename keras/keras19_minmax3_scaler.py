@@ -10,30 +10,8 @@ y = datasets.target
 ic(datasets.feature_names)
 # ic(datasets.DESCR)
 
-# ic(x)
-# ic(y)
-
-# 데이터 정규화 (normalization / regulization / minmax scaler)
-# 모든 값을 최대값으로 나누어 0~1 사이의 값으로 만든다
-# but, 최소값이 0이 아닌 경우 -> 개체-최소값 / 최대값-최소값
-# x의 분포에 따라 가리키는 y의 값은 변동이 없음
-
-# 데이터 전처리
-# ic(np.min(x), np.max(x))    # (0.0, 711.0)
-# x = x/711.
-# x = (x - np.min(x)) / (np.max(x) - np.min(x))
-# ic(x)
-
-from sklearn.preprocessing import MinMaxScaler
-scaler = MinMaxScaler()
-scaler.fit(x)
-x_scale = scaler.transform(x)
-
-ic(x_scale[:])
-ic(np.min(x_scale), np.max(x_scale))
-
 from sklearn.model_selection import train_test_split
-x_train, x_test, y_train, y_test = train_test_split(x_scale, y,
+x_train, x_test, y_train, y_test = train_test_split(x, y,
                                                     train_size=0.7,
                                                     shuffle=True,
                                                     random_state=66)
@@ -43,6 +21,29 @@ x_train, x_test, y_train, y_test = train_test_split(x_scale, y,
 # ic(x_test.shape)    # (152, 13)
 # ic(x_train)
 # ic(y_train)
+
+from sklearn.preprocessing import MinMaxScaler
+scaler = MinMaxScaler()
+scaler.fit(x_train)
+x_train = scaler.transform(x_train)
+x_test = scaler.transform(x_test)
+
+# Train과 Test의 Scale이 다르다.
+# Test 데이터의 값이 훈련에 반영되면 안 된다.
+# 과적합의 가능성이 있기 때문
+
+# [scaler]
+#        |   x           |   y
+# -------|---------------|---------
+# train  |   fit         |   No
+#        |   transform   |   No
+# -------|---------------|---------
+# test   |   transform   |   No
+# -------|---------------|---------
+# val    |   transform   |   No
+# -------|---------------|---------
+# predict|   transform   |   ?
+
 
 #2. 모델 구성
 from tensorflow.keras.models import Sequential

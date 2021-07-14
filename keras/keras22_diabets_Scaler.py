@@ -59,7 +59,7 @@ model = Model(inputs=input1, outputs=output1)
 
 # 3. 컴파일, 훈련
 model.compile(loss='mse', optimizer='adam')
-model.fit(x_train, y_train, epochs=100, batch_size=8)
+model.fit(x_train, y_train, epochs=100, batch_size=8, validation_split=0.1)
 
 # 4. 평가, 예측
 # mse, R2 -> R2 값을 1에 가깝게
@@ -97,3 +97,5 @@ ic(r2)
 # ic| r2: 0.3790339217998282
 
 # PowerTransformer
+# ic| loss: 5661.943359375
+# ic| r2: 0.12759512096540693

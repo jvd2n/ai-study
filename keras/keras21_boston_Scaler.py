@@ -12,7 +12,7 @@ ic(datasets.feature_names)
 
 from sklearn.model_selection import train_test_split
 x_train, x_test, y_train, y_test = train_test_split(x, y,
-                                                    train_size=0.7,
+                                                    train_size=0.8,
                                                     shuffle=True,
                                                     random_state=66)
 # ic(x_test, y_test)
@@ -22,8 +22,13 @@ x_train, x_test, y_train, y_test = train_test_split(x, y,
 # ic(x_train)
 # ic(y_train)
 
-from sklearn.preprocessing import MinMaxScaler
-scaler = MinMaxScaler()
+from sklearn.preprocessing import MinMaxScaler, StandardScaler, MaxAbsScaler, RobustScaler, QuantileTransformer, PowerTransformer
+# scaler = MinMaxScaler()
+# scaler = StandardScaler()
+# scaler = MaxAbsScaler()
+# scaler = RobustScaler()
+# scaler = QuantileTransformer()
+scaler = PowerTransformer()
 scaler.fit(x_train)
 x_train = scaler.transform(x_train)
 x_test = scaler.transform(x_test)
@@ -44,7 +49,7 @@ x_test = scaler.transform(x_test)
 # -------|---------------|---------
 # predict|   transform   |   ?
 
-'''
+
 #2. 모델 구성
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
@@ -86,4 +91,23 @@ ic(r2)
 # MinMaxScaler & Train/Test Scale
 # ic| loss: 5.566455364227295
 # ic| r2: 0.9326234522046936
-'''
+
+# StandardScaler
+# ic| loss: 7.42013692855835
+# ic| r2: 0.9112242701815445
+
+# MaxAbsScaler
+# ic| loss: 7.315191745758057
+# ic| r2: 0.9124798469099608
+
+# RobustScaler
+# ic| loss: 7.366783142089844
+# ic| r2: 0.9118625981667393
+
+# QuantileTransformer
+# ic| loss: 8.021598815917969
+# ic| r2: 0.9040282696363648
+
+# PowerTransformer
+# ic| loss: 6.971561908721924
+# ic| r2: 0.9165910909697962

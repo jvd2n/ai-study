@@ -12,7 +12,7 @@ ic(datasets.feature_names)
 
 from sklearn.model_selection import train_test_split
 x_train, x_test, y_train, y_test = train_test_split(x, y,
-                                                    train_size=0.7,
+                                                    train_size=0.8,
                                                     shuffle=True,
                                                     random_state=66)
 # ic(x_test, y_test)
@@ -22,8 +22,9 @@ x_train, x_test, y_train, y_test = train_test_split(x, y,
 # ic(x_train)
 # ic(y_train)
 
-from sklearn.preprocessing import MinMaxScaler
-scaler = MinMaxScaler()
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
+# scaler = MinMaxScaler()
+scaler = StandardScaler()
 scaler.fit(x_train)
 x_train = scaler.transform(x_train)
 x_test = scaler.transform(x_test)
@@ -44,7 +45,7 @@ x_test = scaler.transform(x_test)
 # -------|---------------|---------
 # predict|   transform   |   ?
 
-'''
+
 #2. 모델 구성
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
@@ -86,4 +87,7 @@ ic(r2)
 # MinMaxScaler & Train/Test Scale
 # ic| loss: 5.566455364227295
 # ic| r2: 0.9326234522046936
-'''
+
+# train_size=0.8 & StandardScaler
+# ic| loss: 7.42013692855835
+# ic| r2: 0.9112242701815445

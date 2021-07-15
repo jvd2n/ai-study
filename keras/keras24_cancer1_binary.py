@@ -47,7 +47,7 @@ from tensorflow.keras.callbacks import EarlyStopping
 # es = EarlyStopping(monitor='loss', patience=5, mode='min', verbose=1)
 es = EarlyStopping(monitor='loss', patience=20, mode='min', verbose=1)
 
-hist = model.fit(x_train, y_train, epochs=1000, batch_size=8, validation_split=0.2, callbacks=[es])
+hist = model.fit(x_train, y_train, epochs=1000, batch_size=8, validation_split=0.1, callbacks=[es])
 
 # print(hist)
 # <tensorflow.python.keras.callbacks.History object at 0x000001EA87749CA0>
@@ -71,16 +71,16 @@ print(f'accuracy: {loss[1]}')
 # r2 = r2_score(y_test, y_predict)  # y_test와 y_predict값을 통해 결정계수를 계산
 # ic(r2)
 
-import matplotlib.pyplot as plt
-# from matplotlib import font_manager, rc
+# import matplotlib.pyplot as plt
+# # from matplotlib import font_manager, rc
 
-plt.rc('font', family='NanumGothic')
-# print(plt.rcParams['font.family'])
-plt.plot(hist.history['loss'])   # x: epoch / y: hist.history['loss']
-plt.plot(hist.history['val_loss'])
+# plt.rc('font', family='NanumGothic')
+# # print(plt.rcParams['font.family'])
+# plt.plot(hist.history['loss'])   # x: epoch / y: hist.history['loss']
+# plt.plot(hist.history['val_loss'])
 
-plt.title('로스, 발로스')
-plt.xlabel('epochs')
-plt.ylabel('loss, val_loss')
-plt.legend(['train loss', 'val loss'])
-plt.show()
+# plt.title('로스, 발로스')
+# plt.xlabel('epochs')
+# plt.ylabel('loss, val_loss')
+# plt.legend(['train loss', 'val loss'])
+# plt.show()

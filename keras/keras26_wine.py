@@ -1,19 +1,24 @@
 from icecream import ic
 import numpy as np
-from sklearn.datasets import load_breast_cancer
+from sklearn.datasets import load_wine
 
-datasets = load_breast_cancer()
-
-ic(datasets.DESCR)
-ic(datasets.feature_names)
+datasets = load_wine()
+print(datasets.DESCR)
+print(datasets.feature_names)
 
 x = datasets.data
 y = datasets.target
 
-ic(x.shape, y.shape)    # (569, 30) (569,)
+ic(x.shape, y.shape)    # (150, 4) (150,)
+ic(y)
+ic(datasets)
+ic(datasets.target_names)
 
-ic(y[:20])
-ic(np.unique(y))
+
+from tensorflow.keras.utils import to_categorical
+y = to_categorical(y)
+ic(y[:5])
+ic(y.shape)
 
 from sklearn.model_selection import train_test_split
 x_train, x_test, y_train, y_test = train_test_split(x, y,
@@ -33,21 +38,21 @@ x_test = scaler.transform(x_test)
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 model = Sequential()
-model.add(Dense(128, activation='relu', input_shape=(30,)))
+model.add(Dense(128, activation='relu', input_shape=(13,)))
 model.add(Dense(64, activation='relu'))
 model.add(Dense(64, activation='relu'))
 model.add(Dense(64, activation='relu'))
 model.add(Dense(32, activation='relu'))
-model.add(Dense(1, activation='sigmoid'))   # 선형회귀분류가 아닌 이진분류로 지정함. 0과 1 사이의 값
+model.add(Dense(3, activation='softmax'))   # softmax -> 다중분류
 
 # 3. 컴파일, 훈련
-model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
 from tensorflow.keras.callbacks import EarlyStopping
 # es = EarlyStopping(monitor='loss', patience=5, mode='min', verbose=1)
 es = EarlyStopping(monitor='loss', patience=20, mode='min', verbose=1)
 
-hist = model.fit(x_train, y_train, epochs=100, batch_size=8, validation_split=0.1, callbacks=[es])
+hist = model.fit(x_train, y_train, epochs=100, batch_size=8, validation_split=0.2, callbacks=[es])
 
 # print(hist)
 # <tensorflow.python.keras.callbacks.History object at 0x000001EA87749CA0>
@@ -64,10 +69,14 @@ loss = model.evaluate(x_test, y_test)   # evaluate -> return loss, metrics
 print(f'loss: {loss[0]}')
 print(f'accuracy: {loss[1]}')
 
-ic('================= PREDICT =================')
-ic(y_test[-5:])
-y_predict = model.predict(x_test[-5:])
-ic(y_predict)
+# loss: 0.11009635776281357
+# accuracy: 0.9814814925193787
+
+# ic('================= PREDICT =================')
+# ic(y_test[:5])
+# y_predict = model.predict(x_test[:5])
+# ic(y_predict)
+
 
 # y_predict = model.predict(x_test)  # x_test를 훈련시킨 값으로
 # # ic(y_predict)

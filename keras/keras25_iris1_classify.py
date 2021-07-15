@@ -61,7 +61,7 @@ from tensorflow.keras.callbacks import EarlyStopping
 # es = EarlyStopping(monitor='loss', patience=5, mode='min', verbose=1)
 es = EarlyStopping(monitor='loss', patience=20, mode='min', verbose=1)
 
-hist = model.fit(x_train, y_train, epochs=1000, batch_size=8, validation_split=0.2, callbacks=[es])
+hist = model.fit(x_train, y_train, epochs=100, batch_size=8, validation_split=0.2, callbacks=[es])
 
 # print(hist)
 # <tensorflow.python.keras.callbacks.History object at 0x000001EA87749CA0>
@@ -73,9 +73,16 @@ hist = model.fit(x_train, y_train, epochs=1000, batch_size=8, validation_split=0
 # print(hist.history['val_loss'])
 
 # 4. 평가, 예측
+ic('================= EVALUATE =================')
 loss = model.evaluate(x_test, y_test)   # evaluate -> return loss, metrics
 print(f'loss: {loss[0]}')
 print(f'accuracy: {loss[1]}')
+
+ic('================= PREDICT =================')
+ic(y_test[:5])
+y_predict = model.predict(x_test[:5])
+ic(y_predict)
+
 
 # y_predict = model.predict(x_test)  # x_test를 훈련시킨 값으로
 # # ic(y_predict)

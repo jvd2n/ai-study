@@ -18,8 +18,7 @@ from keras.utils import np_utils
 # plt.imshow(x_train[111], 'gray')
 # plt.show()
 
-# Data Preprocessing
-
+# Data preprocessing
 x_train = x_train.reshape(60000, 28, 28, 1).astype('float32')/255
 # (60000, 28, 14, 2) or (60000, 14, 14, 4) 등으로 변경해도 무방
 # 단, 모델링의 정교함?이 필요
@@ -52,6 +51,8 @@ model.add(Conv2D(30, (2, 2), padding='valid'))              # (N, 8, 8, 30)
 model.add(MaxPool2D())                                      # (N, 4, 4, 30)
 model.add(Conv2D(15, (2,2)))
 model.add(Flatten())                                        # (N, 480)
+model.add(Dense(256, activation='relu'))
+model.add(Dense(128, activation='relu'))
 model.add(Dense(128, activation='relu'))
 model.add(Dense(64, activation='relu'))
 model.add(Dense(64, activation='relu'))
@@ -67,8 +68,8 @@ from tensorflow.keras.callbacks import EarlyStopping
 # es = EarlyStopping(monitor='loss', patience=5, mode='min', verbose=1)
 es = EarlyStopping(monitor='val_loss', patience=30, mode='min', verbose=1)
 
-model.fit(x_train, y_train, epochs=100, batch_size=256, verbose=2,
-    validation_split=0.00005, callbacks=[es])
+model.fit(x_train, y_train, epochs=100, batch_size=64, verbose=2,
+    validation_split=0.00001, callbacks=[es])
 
 
 #4 Evaluate

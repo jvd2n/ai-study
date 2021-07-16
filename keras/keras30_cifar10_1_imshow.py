@@ -8,8 +8,8 @@ from tensorflow.keras.datasets import cifar10
 
 ic(x_train.shape, y_train.shape)
 ic(x_test.shape, y_test.shape)
-# ic| x_train.shape: (60000, 28, 28), y_train.shape: (60000,)
-# ic| x_test.shape: (10000, 28, 28), y_test.shape: (10000,)
+# ic| x_train.shape: (50000, 32, 32, 3), y_train.shape: (50000, 1)
+# ic| x_test.shape: (10000, 32, 32, 3), y_test.shape: (10000, 1)
 
 ic(x_train[0])
 ic(y_train[0])

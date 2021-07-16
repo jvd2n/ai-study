@@ -131,11 +131,10 @@ print(f'accuracy: {loss[1]}')
 # loss: 2.754335641860962
 # accuracy: 0.6340135931968689
 
-# Robust Scaler (train_size=0.7, val_split=0.2)
+# Robust Scaler
 # loss: 2.636126756668091
 # accuracy: 0.6346938610076904
 
-# Robust Scaler (train_size=0.95, val_split=0.0001)
 # loss: 3.1227855682373047
 # accuracy: 0.7387754917144775
 
@@ -144,3 +143,6 @@ print(f'accuracy: {loss[1]}')
 
 # loss: 0.6401194930076599
 # accuracy: 0.8285714387893677
+
+# loss: 0.12348096817731857
+# accuracy: 0.9333333373069763

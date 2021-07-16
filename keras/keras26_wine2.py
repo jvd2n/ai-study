@@ -1,8 +1,11 @@
 from icecream import ic 
 import numpy as np
 import pandas as pd
+import os
 
-datasets = pd.read_csv('D:\study\_data\winequality-white.csv', sep=';', index_col=None, header=0)
+ic(os.getcwd())
+path = os.getcwd()
+datasets = pd.read_csv(f'{path}/_data/winequality-white.csv', sep=';', index_col=None, header=0)
 
 # ./ : 현재폴더
 # ../ : 상위폴더

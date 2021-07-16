@@ -14,4 +14,3 @@ model.summary()
 
 #1 Conv2D의 디폴트 액티베이션
 #2 Conv2D summary의 파라미터 개수 완벽 이해
-

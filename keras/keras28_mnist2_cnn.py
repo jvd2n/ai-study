@@ -67,7 +67,7 @@ from tensorflow.keras.callbacks import EarlyStopping
 # es = EarlyStopping(monitor='loss', patience=5, mode='min', verbose=1)
 es = EarlyStopping(monitor='val_loss', patience=30, mode='min', verbose=1)
 
-model.fit(x_train, y_train, epochs=100, batch_size=64, verbose=2,
+model.fit(x_train, y_train, epochs=100, batch_size=256, verbose=2,
     validation_split=0.00005, callbacks=[es])
 
 

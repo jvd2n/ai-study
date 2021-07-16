@@ -41,14 +41,16 @@ ic(y)
 ic(x.shape)
 from sklearn.model_selection import train_test_split
 x_train, x_test, y_train, y_test = train_test_split(x, y,
-                                                    train_size=0.98,
+                                                    train_size=0.997,
                                                     shuffle=True,
-                                                    random_state=66)
+                                                    random_state=15)
 
 from sklearn.preprocessing import MinMaxScaler, StandardScaler, MaxAbsScaler, RobustScaler, QuantileTransformer, PowerTransformer
 # scaler = MinMaxScaler()
 # scaler = StandardScaler()
+# scaler = MaxAbsScaler()
 scaler = RobustScaler()
+# scaler = QuantileTransformer()
 # scaler = PowerTransformer()
 scaler.fit(x_train)
 x_train = scaler.transform(x_train)
@@ -59,20 +61,13 @@ ic(x_test)
 #2. 모델 구성
 from tensorflow.keras.models import Sequential, Model
 from tensorflow.keras.layers import Dense, Input
-# model = Sequential()
-# model.add(Dense(128, activation='relu', input_shape=(9,)))
-# model.add(Dense(64, activation='relu'))
-# model.add(Dense(64, activation='relu'))
-# model.add(Dense(64, activation='relu'))
-# model.add(Dense(32, activation='relu'))
-# model.add(Dense(7, activation='softmax'))   # softmax -> 다중분류
 
 input1 = Input(shape=(11,), sparse=True)
-xx = Dense(128, activation='relu')(input1)
+xx = Dense(256, activation='relu')(input1)
+xx = Dense(128, activation='relu')(xx)
+xx = Dense(128, activation='relu')(xx)
 xx = Dense(64, activation='relu')(xx)
 xx = Dense(64, activation='relu')(xx)
-xx = Dense(64, activation='relu')(xx)
-xx = Dense(32, activation='relu')(xx)
 xx = Dense(32, activation='relu')(xx)
 output1 = Dense(7, activation='softmax')(xx)
 
@@ -83,9 +78,9 @@ model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accur
 
 from tensorflow.keras.callbacks import EarlyStopping
 # es = EarlyStopping(monitor='loss', patience=5, mode='min', verbose=1)
-es = EarlyStopping(monitor='loss', patience=50, mode='min', verbose=1)
+es = EarlyStopping(monitor='val_loss', patience=30, mode='min', verbose=1)
 
-model.fit(x_train, y_train, epochs=1000, batch_size=32, verbose=2, validation_split=0.0001, callbacks=[es])
+model.fit(x_train, y_train, epochs=500, batch_size=32, verbose=2, validation_split=0.00003, callbacks=[es])
 
 # print(hist)
 # <tensorflow.python.keras.callbacks.History object at 0x000001EA87749CA0>
@@ -97,7 +92,7 @@ model.fit(x_train, y_train, epochs=1000, batch_size=32, verbose=2, validation_sp
 # print(hist.history['val_loss'])
 
 # 4. 평가, 예측
-ic('================= EVALUATE =================')
+ic('================= EVALUATE ==================')
 loss = model.evaluate(x_test, y_test)   # evaluate -> return loss, metrics
 print(f'loss: {loss[0]}')
 print(f'accuracy: {loss[1]}')
@@ -136,11 +131,16 @@ print(f'accuracy: {loss[1]}')
 # loss: 2.754335641860962
 # accuracy: 0.6340135931968689
 
-# Robust Scaler (trainsize=0.7, val_split=0.2)
+# Robust Scaler (train_size=0.7, val_split=0.2)
 # loss: 2.636126756668091
 # accuracy: 0.6346938610076904
 
-# Robust Scaler (trainsize=0.95, val_split=0.0001)
+# Robust Scaler (train_size=0.95, val_split=0.0001)
 # loss: 3.1227855682373047
 # accuracy: 0.7387754917144775
 
+# loss: 0.7924945950508118
+# accuracy: 0.7714285850524902
+
+# loss: 0.6401194930076599
+# accuracy: 0.8285714387893677

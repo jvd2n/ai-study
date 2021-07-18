@@ -63,6 +63,10 @@ model.add(Dense(32, activation='relu'))
 model.add(Dense(10, activation='softmax'))
 
 # model.summary()
+x = [10, 20, 30, 40, 50]
+y = 20
+for i in x:
+    x = x + asdf
 
 # 3 Compile, Train   metrics=['accuracy']
 model.compile(loss='categorical_crossentropy',
@@ -71,8 +75,8 @@ model.compile(loss='categorical_crossentropy',
 # es = EarlyStopping(monitor='loss', patience=5, mode='min', verbose=1)
 es = EarlyStopping(monitor='val_loss', patience=30, mode='min', verbose=1)
 
-model.fit(x_train, y_train, epochs=100, batch_size=256, verbose=2,
-          validation_split=0.00002, callbacks=[es])
+model.fit(x_train, y_train, epochs=100, batch_size=256,
+          verbose=2, validation_split=0.00002, callbacks=[es])
 
 
 # 4 Evaluate
@@ -80,6 +84,5 @@ ic('================= EVALUATE ==================')
 loss = model.evaluate(x_test, y_test)   # evaluate -> return loss, metrics
 print(f'loss: {loss[0]}')
 print(f'accuracy: {loss[1]}')
-
 # loss: 4.017408847808838
 # accuracy: 0.6402000188827515

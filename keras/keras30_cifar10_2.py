@@ -63,10 +63,6 @@ model.add(Dense(32, activation='relu'))
 model.add(Dense(10, activation='softmax'))
 
 # model.summary()
-x = [10, 20, 30, 40, 50]
-y = 20
-for i in x:
-    x = x + asdf
 
 # 3 Compile, Train   metrics=['accuracy']
 model.compile(loss='categorical_crossentropy',

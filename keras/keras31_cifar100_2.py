@@ -22,17 +22,17 @@ from keras.utils import np_utils
 
 # Data Preprocessing
 
-x_train = x_train.reshape(50000, 32, 32, 3).astype('float32')/255
+x_train = x_train.reshape(50000, 32, 32, 3).astype('float32')/255.
 # (60000, 28, 14, 2) or (60000, 14, 14, 4) 등으로 변경해도 무방
 # 단, 모델링의 정교함?이 필요
-x_test = x_test.reshape(10000, 32, 32, 3).astype('float32')/255
+x_test = x_test.reshape(10000, 32, 32, 3).astype('float32')/255.
 
 ic(np.unique(y_train))
 # ic| np.unique(y_train): array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], dtype=uint8)
 ic(x_train.shape, x_test.shape)
 
-y_train = y_train.reshape(50000, 1)
-y_test = y_test.reshape(10000, 1)
+y_train = y_train.reshape(-1, 1)
+y_test = y_test.reshape(-1, 1)
 ic(y_train.shape, y_test.shape)
 
 from sklearn import preprocessing
@@ -68,10 +68,10 @@ model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accur
 
 from tensorflow.keras.callbacks import EarlyStopping
 # es = EarlyStopping(monitor='loss', patience=5, mode='min', verbose=1)
-es = EarlyStopping(monitor='val_loss', patience=30, mode='min', verbose=1)
+es = EarlyStopping(monitor='val_loss', patience=20, mode='min', verbose=1)
 
-model.fit(x_train, y_train, epochs=100, batch_size=256, verbose=2,
-    validation_split=0.00005, callbacks=[es])
+model.fit(x_train, y_train, epochs=100, batch_size=512, verbose=2,
+    validation_split=0.000025, callbacks=[es])
 
 
 #4 Evaluate

@@ -7,12 +7,21 @@ from keras.utils import np_utils
 
 #1. Data
 (x_train, y_train), (x_test, y_test) = cifar10.load_data()
+ic(x_train.shape, x_test.shape)
 
 # Data preprocessing
-x_train = x_train.reshape(x_train.shape[0], x_train.shape[1] * x_train.shape[2], 1)
-x_test = x_test.reshape(x_test.shape[0], x_test.shape[1] * x_test.shape[2], 1)
+x_train = x_train.reshape(x_train.shape[0], x_train.shape[1] * x_train.shape[2] * x_train.shape[3])
+x_test = x_test.reshape(x_test.shape[0], x_test.shape[1] * x_test.shape[2] * x_test.shape[3])
+ic(x_train.shape, x_test.shape)
+
+from sklearn.preprocessing import StandardScaler, MinMaxScaler, MaxAbsScaler, RobustScaler, QuantileTransformer, PowerTransformer
+scaler = StandardScaler()
+x_train = scaler.fit_transform(x_train)
+x_test = scaler.transform(x_test)
 
 ic(x_train.shape, x_test.shape)
+x_train = x_train.reshape(-1, 32 * 32, 3)
+x_test = x_test.reshape(-1, 32 * 32, 3)
 
 from sklearn.preprocessing import OneHotEncoder
 oneEnc = OneHotEncoder()
@@ -22,16 +31,17 @@ y_train = oneEnc.fit_transform(y_train).toarray()
 y_test = oneEnc.transform(y_test).toarray()
 
 #2. Model
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Conv2D, Flatten, MaxPool2D, GlobalAveragePooling1D, LSTM
+from tensorflow.keras.models import Sequential, Model
+from tensorflow.keras.layers import Dense, Conv2D, Flatten, MaxPool2D, GlobalAveragePooling1D, LSTM, Input
 
-model = Sequential()
-model.add(LSTM(16, activation='relu', input_shape=(x_train.shape[1] * x_train.shape[2], 1)))
-# model.add(Dense(64, activation='relu'))
-# model.add(Dense(64, activation='relu'))
-# model.add(Dense(32, activation='relu'))
-model.add(Dense(32, activation='relu'))
-model.add(Dense(10, activation='softmax'))
+input1 = Input(shape=(32*32, 3))
+xx = LSTM(units=10, activation='relu')(input1)
+xx = Dense(128, activation='relu')(xx)
+xx = Dense(64, activation='relu')(xx)
+xx = Dense(32, activation='relu')(xx)
+xx = Dense(16, activation='relu')(xx)
+output1 = Dense(10, activation='softmax')(xx)
+model = Model(inputs=input1, outputs=output1)
 
 #3 Compile, Train   metrics=['accuracy']
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['acc'])
@@ -65,4 +75,7 @@ accuracy: 0.9753999710083008
 DNN + GAP
 loss: 1.7715743780136108
 accuracy: 0.35740000009536743
+
+LSTM
+
 '''

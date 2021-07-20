@@ -14,20 +14,23 @@ x_test = x_test.reshape(x_test.shape[0], x_test.shape[1] * x_test.shape[2], 1)
 
 ic(x_train.shape, x_test.shape)
 
-from tensorflow.keras.utils import to_categorical
-y_train = to_categorical(y_train)
-y_test = to_categorical(y_test)
+from sklearn.preprocessing import OneHotEncoder
+oneEnc = OneHotEncoder()
+y_train = y_train.reshape(-1,1)
+y_test = y_test.reshape(-1,1)
+y_train = oneEnc.fit_transform(y_train).toarray()
+y_test = oneEnc.transform(y_test).toarray()
 
 #2. Model
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Conv2D, Flatten, MaxPool2D, GlobalAveragePooling1D, LSTM
 
 model = Sequential()
-model.add(LSTM(32, activation='relu', input_shape=(x_train.shape[1] * x_train.shape[2], 1)))
-model.add(Dense(64, activation='relu'))
-model.add(Dense(64, activation='relu'))
-model.add(Dense(32, activation='relu'))
-model.add(Dense(32, activation='relu'))
+model.add(LSTM(16, activation='relu', input_shape=(x_train.shape[1] * x_train.shape[2], 1)))
+# model.add(Dense(64, activation='relu'))
+# model.add(Dense(64, activation='relu'))
+# model.add(Dense(32, activation='relu'))
+model.add(Dense(16, activation='relu'))
 model.add(Dense(10, activation='softmax'))
 
 #3 Compile, Train   metrics=['accuracy']
@@ -37,8 +40,8 @@ from tensorflow.keras.callbacks import EarlyStopping
 es = EarlyStopping(monitor='val_loss', patience=10, mode='min', verbose=1)
 
 start_time = time.time()
-model.fit(x_train, y_train, epochs=10, batch_size=128, verbose=2,
-    validation_split=0.02, callbacks=[es])
+model.fit(x_train, y_train, epochs=100, batch_size=256, verbose=2, 
+          validation_split=0.02, callbacks=[es])
 end_time = time.time()
 duration_time = end_time - start_time
 

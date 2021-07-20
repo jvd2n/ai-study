@@ -17,6 +17,9 @@ scaler = StandardScaler()
 x_train = scaler.fit_transform(x_train)
 x_test = scaler.transform(x_test)
 
+x_train = x_train.reshape(50000, 32 * 32, 3)
+x_test = x_test.reshape(10000, 32 * 32, 3)
+
 from tensorflow.keras.utils import to_categorical
 y_train = to_categorical(y_train)
 y_test = to_categorical(y_test)
@@ -45,7 +48,7 @@ model.fit(x_train, y_train, epochs=100, batch_size=64, verbose=2, validation_spl
 ic('================= EVALUATE ==================')
 loss = model.evaluate(x_test, y_test)   # evaluate -> return loss, metrics
 print(f'loss: {loss[0]}')
-print(f'accuracy: {loss[1]}')
+print(f'accuracy: {loss[1]}'        )
 
 '''
 CNN

@@ -10,7 +10,7 @@ x = np.array([[1,2,3], [2,3,4], [3,4,5], [4,5,6],
 y = np.array([4,5,6,7,8,9,10,11,12,13,50,60,70])
 x_predict = np.array([50,60,70])
 
-print(x.shape, y.shape) # (4, 3) (4,)
+print(x.shape, y.shape) # (13, 3) (13,)
 
 x = x.reshape(-1, 3, 1)  # (batch_size, timesteps, feature)
 x = x.reshape(x.shape[0], x.shape[1], 1)  # (batch_size, timesteps, feature)

@@ -1,3 +1,4 @@
+import time
 from icecream import ic
 import numpy as np
 import matplotlib.pyplot as plt
@@ -6,17 +7,13 @@ from keras.utils import np_utils
 
 #1. Data
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
+ic(x_train.shape, x_test.shape)
 
 # Data preprocessing
-x_train = x_train.reshape(60000, 28 * 28)
-x_test = x_test.reshape(10000, 28 * 28)
-# x_train = x_train.reshape(60000, 28 * 28, 1)
-# x_test = x_test.reshape(10000, 28 * 28, 1)
+x_train = x_train.reshape(x_train.shape[0], x_train.shape[1] * x_train.shape[2], 1)
+x_test = x_test.reshape(x_test.shape[0], x_test.shape[1] * x_test.shape[2], 1)
 
-from sklearn.preprocessing import MinMaxScaler, StandardScaler, MaxAbsScaler, PowerTransformer
-scaler = StandardScaler()
-x_train = scaler.fit_transform(x_train)
-x_test = scaler.transform(x_test)
+ic(x_train.shape, x_test.shape)
 
 from tensorflow.keras.utils import to_categorical
 y_train = to_categorical(y_train)
@@ -24,35 +21,32 @@ y_test = to_categorical(y_test)
 
 #2. Model
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Conv2D, Flatten, MaxPool2D, GlobalAveragePooling1D
+from tensorflow.keras.layers import Dense, Conv2D, Flatten, MaxPool2D, GlobalAveragePooling1D, LSTM
 
 model = Sequential()
-model.add(Dense(100, activation='relu', input_shape=(28 * 28,)))
-# model.add(Dense(100, activation='relu', input_shape=(28 * 28, 1)))
+model.add(LSTM(32, activation='relu', input_shape=(x_train.shape[1] * x_train.shape[2], 1)))
 model.add(Dense(64, activation='relu'))
 model.add(Dense(64, activation='relu'))
 model.add(Dense(32, activation='relu'))
 model.add(Dense(32, activation='relu'))
-# model.add(GlobalAveragePooling1D())
 model.add(Dense(10, activation='softmax'))
-
-# DNN 구해서 CNN 비교
-# DNN + GlobalAveragePooling 구해서 CNN 비교
 
 #3 Compile, Train   metrics=['accuracy']
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['acc'])
 
 from tensorflow.keras.callbacks import EarlyStopping
-# es = EarlyStopping(monitor='loss', patience=5, mode='min', verbose=1)
 es = EarlyStopping(monitor='val_loss', patience=10, mode='min', verbose=1)
 
-model.fit(x_train, y_train, epochs=100, batch_size=128, verbose=2,
-    validation_split=0.00001, callbacks=[es])
-
+start_time = time.time()
+model.fit(x_train, y_train, epochs=10, batch_size=128, verbose=2,
+    validation_split=0.02, callbacks=[es])
+end_time = time.time()
+duration_time = end_time - start_time
 
 #4 Evaluate
 ic('================= EVALUATE ==================')
 loss = model.evaluate(x_test, y_test)   # evaluate -> return loss, metrics
+ic(duration_time)
 print(f'loss: {loss[0]}')
 print(f'accuracy: {loss[1]}')
 
@@ -63,8 +57,8 @@ loss: 0.05057989060878754
 accuracy: 0.9922999739646912
 
 DNN
-loss: 0.16465343534946442
-accuracy: 0.9765999913215637
+loss: 0.17536625266075134
+accuracy: 0.9753999710083008
 
 DNN + GAP
 loss: 1.7715743780136108

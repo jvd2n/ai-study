@@ -58,7 +58,7 @@ model.compile(loss='mse', optimizer='adam', metrics=['mae'])
 model.fit([x1_train, x2_train], y_train, epochs=100, batch_size=8, verbose=1)
 
 
-#4. 평가, 에측
+#4. 평가, 예측
 results = model.evaluate([x1_test, x2_test], y_test)
 # ic(results)
 print('loss : ', results[0])

@@ -1,0 +1,67 @@
+import numpy as np
+from tensorflow.keras.models import Sequential, Model
+from tensorflow.keras.layers import Dense, Input, SimpleRNN, LSTM, GRU
+import time
+
+#1. Data
+x = np.array([[1,2,3], [2,3,4], [3,4,5], [4,5,6],
+              [5,6,7], [6,7,8], [7,8,9], [8,9,10],
+              [9,10,11], [10,11,12],
+              [20,30,40], [30,40,50], [40,50,60]])
+y = np.array([4,5,6,7,8,9,10,11,12,13,50,60,70])
+x_predict = np.array([50,60,70])
+
+print(x.shape, y.shape) # (4, 3) (4,)
+
+x = x.reshape(-1, 3, 1)  # (batch_size, timesteps, feature)
+x = x.reshape(x.shape[0], x.shape[1], 1)  # (batch_size, timesteps, feature)
+x_predict = x_predict.reshape(1, x_predict.shape[0], 1)
+
+#2. Modeling
+# model = Sequential()
+# # model.add(SimpleRNN(units=10, activation='relu', input_shape=(3, 1)))
+# model.add(GRU(units=64, activation='relu', input_shape=(3, 1)))
+# model.add(Dense(64, activation='relu'))
+# model.add(Dense(32, activation='relu'))
+# model.add(Dense(32, activation='relu'))
+# model.add(Dense(8, activation='relu'))
+# model.add(Dense(1))
+
+input1 = Input(shape=(3, 1))
+xx = SimpleRNN(32, activation='relu')(input1)
+xx = Dense(64, activation='relu')(xx)
+xx = Dense(64, activation='relu')(xx)
+xx = Dense(32, activation='relu')(xx)
+xx = Dense(32, activation='relu')(xx)
+xx = Dense(8, activation='relu')(xx)
+output1 = Dense(1)(xx)
+model = Model(inputs=input1, outputs=output1)
+
+#3. Compile, Train
+start_time = time.time()
+model.compile(loss='mse', optimizer='adam')
+model.fit(x, y, epochs=100, batch_size=1, verbose=1)
+end_time = time.time() - start_time
+
+#4. Evaluate, Predict
+results = model.predict(x_predict)
+print(f'DoT: {end_time}')
+print(results)
+
+# model.summary()
+
+# 80에 근접한 값 출력
+'''
+[[78.4406]]
+'''
+'''
+(Input + bias) * output + ouput * output
+= (Input + bias + output) * output
+
+LSTM -> 4배의 연산이 더 이루어짐
+
+(num_features + num_units)* num_units + biases
+param = num_units * * (num_units + input_dim + 1)
+파라미터 아웃값 * (파라미터 아웃값 + 디멘션값 + 1(바이어스))
+( (unit 개수 + 1) * unit 개수 ) + ( input_dim(feature) 수 * unit 개수 )
+'''

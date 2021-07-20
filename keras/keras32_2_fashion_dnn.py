@@ -10,6 +10,11 @@ from keras.utils import np_utils
 x_train = x_train.reshape(60000, 28 * 28)
 x_test = x_test.reshape(10000, 28 * 28)
 
+from sklearn.preprocessing import MinMaxScaler, StandardScaler, MaxAbsScaler, PowerTransformer
+scaler = StandardScaler()
+x_train = scaler.fit_transform(x_train)
+x_test = scaler.transform(x_test)
+
 from tensorflow.keras.utils import to_categorical
 y_train = to_categorical(y_train)
 y_test = to_categorical(y_test)

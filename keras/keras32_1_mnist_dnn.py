@@ -14,10 +14,7 @@ x_test = x_test.reshape(10000, 28 * 28)
 # x_test = x_test.reshape(10000, 28 * 28, 1)
 
 from sklearn.preprocessing import MinMaxScaler, StandardScaler, MaxAbsScaler, PowerTransformer
-# scaler = MinMaxScaler()
-# scaler = PowerTransformer()
 scaler = StandardScaler()
-# scaler = MaxAbsScaler()
 x_train = scaler.fit_transform(x_train)
 x_test = scaler.transform(x_test)
 

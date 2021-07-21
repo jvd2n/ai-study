@@ -9,8 +9,8 @@ from keras.utils import np_utils
 (x_train, y_train), (x_test, y_test) = cifar100.load_data()
 
 # Data preprocessing
-x_train = x_train.reshape(x_train.shape[0], x_train.shape[1] * x_train.shape[2], 1)
-x_test = x_test.reshape(x_test.shape[0], x_test.shape[1] * x_test.shape[2], 1)
+x_train = x_train.reshape(-1, 32 * 32, 3)
+x_test = x_test.reshape(-1, 32 * 32, 3)
 
 ic(x_train.shape, x_test.shape)
 
@@ -22,16 +22,15 @@ y_train = oneEnc.fit_transform(y_train).toarray()
 y_test = oneEnc.transform(y_test).toarray()
 
 #2. Model
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Conv2D, Flatten, MaxPool2D, GlobalAveragePooling1D, LSTM
+from tensorflow.keras.models import Sequential, Model
+from tensorflow.keras.layers import Dense, Conv2D, Flatten, MaxPool2D, GlobalAveragePooling1D, LSTM, Input
 
 model = Sequential()
-model.add(LSTM(16, activation='relu', input_shape=(x_train.shape[1] * x_train.shape[2], 1)))
-# model.add(Dense(64, activation='relu'))
-# model.add(Dense(64, activation='relu'))
-# model.add(Dense(32, activation='relu'))
-model.add(Dense(16, activation='relu'))
-model.add(Dense(10, activation='softmax'))
+input1 = Input(shape=(32*32, 3))
+xx = LSTM(units=10, activation='relu')(input1)
+xx = Dense(128, activation='relu')(xx)
+output1 = Dense(100, activation='softmax')(xx)
+model = Model(inputs=input1, outputs=output1)
 
 #3 Compile, Train   metrics=['accuracy']
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['acc'])
@@ -40,7 +39,7 @@ from tensorflow.keras.callbacks import EarlyStopping
 es = EarlyStopping(monitor='val_loss', patience=10, mode='min', verbose=1)
 
 start_time = time.time()
-model.fit(x_train, y_train, epochs=100, batch_size=256, verbose=2, 
+model.fit(x_train, y_train, epochs=10, batch_size=1024, 
           validation_split=0.02, callbacks=[es])
 end_time = time.time()
 duration_time = end_time - start_time
@@ -65,4 +64,7 @@ accuracy: 0.9753999710083008
 DNN + GAP
 loss: 1.7715743780136108
 accuracy: 0.35740000009536743
+
+LSTM
+
 '''

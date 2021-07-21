@@ -15,7 +15,7 @@ print(x.shape, y.shape) # (4, 3) (4,)
 x = x.reshape(-1, 3, 1)  # (batch_size, timesteps, feature)
 x = x.reshape(x.shape[0], x.shape[1], 1)  # (batch_size, timesteps, feature)
 x_predict = x_predict.reshape(1, x_predict.shape[0], 1)
-
+print(x.shape, x_predict.shape)
 #2. Modeling
 model = Sequential()
 # model.add(SimpleRNN(units=10, activation='relu', input_shape=(3, 1)))

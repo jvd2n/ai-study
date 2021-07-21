@@ -2,7 +2,6 @@ from sklearn.datasets import load_boston
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import r2_score
 from icecream import ic
 
 datasets = load_boston()
@@ -45,6 +44,7 @@ y_predict = model.predict(x_test)  # x_test를 훈련시킨 값으로
 ic(y_predict)
 
 # R2 결정 계수
+from sklearn.metrics import r2_score
 r2 = r2_score(y_test, y_predict)  # y_test와 y_predict값을 통해 결정계수를 계산
 ic(r2)
 

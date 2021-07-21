@@ -12,7 +12,7 @@ ic(x_train.shape, x_test.shape)
 x_train = x_train.reshape(x_train.shape[0], x_train.shape[1] * x_train.shape[2])
 x_test = x_test.reshape(x_test.shape[0], x_test.shape[1] * x_test.shape[2])
 
-from sklearn.preprocessing import StandardScaler, MinMaxScaler, MaxAbsScaler, RobustScaler, QuantileTransformer, PowerTransformer
+from sklearn.preprocessing import StandardScaler
 scaler = StandardScaler()
 x_train = scaler.fit_transform(x_train)
 x_test = scaler.transform(x_test) 
@@ -33,16 +33,19 @@ ic(y_train.shape, y_test.shape)
 
 #2. Model
 from tensorflow.keras.models import Sequential, Model
-from tensorflow.keras.layers import Dense, Conv2D, Flatten, MaxPool2D, GlobalAveragePooling1D, LSTM, Input
+from tensorflow.keras.layers import Dense, Input, Conv1D, Flatten, Dropout, GlobalAveragePooling1D, MaxPooling1D
 
-input1 = Input(shape=(28*28, 1))
-xx = LSTM(units=10, activation='relu')(input1)
-xx = Dense(128, activation='relu')(xx)
-xx = Dense(64, activation='relu')(xx)
-xx = Dense(32, activation='relu')(xx)
-xx = Dense(16, activation='relu')(xx)
-output1 = Dense(10, activation='softmax')(xx)
-model = Model(inputs=input1, outputs=output1)
+model = Sequential()
+model.add(Conv1D(filters=32, kernel_size=2, padding='same', activation='relu', input_shape=(28 * 28, 1)))
+model.add(Dropout(0.2))
+model.add(Conv1D(32, 2, padding='same', activation='relu'))
+model.add(MaxPooling1D())
+model.add(Conv1D(64, 2, padding='same', activation='relu'))
+model.add(Flatten())
+model.add(Dense(128, activation='relu'))
+model.add(Dense(64, activation='relu'))
+model.add(Dense(32, activation='relu'))
+model.add(Dense(10, activation='softmax'))
 
 #3 Compile, Train
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['acc'])
@@ -51,18 +54,17 @@ from tensorflow.keras.callbacks import EarlyStopping
 es = EarlyStopping(monitor='val_loss', patience=10, mode='min', verbose=1)
 
 start_time = time.time()
-model.fit(x_train, y_train, epochs=100, batch_size=512, verbose=2, 
+model.fit(x_train, y_train, epochs=10, batch_size=512, verbose=2, 
           validation_split=0.02, callbacks=[es])
-end_time = time.time()
-duration_time = end_time - start_time
+duration_time = time.time() - start_time
+
 
 #4 Evaluate
-ic('================= EVALUATE ==================')
 loss = model.evaluate(x_test, y_test)   # evaluate -> return loss, metrics
+
 ic(duration_time)
-print(f'loss: {loss[0]}')
-print(f'accuracy: {loss[1]}')
-print(loss)
+ic(loss[0])
+ic(loss[1])
 
 
 '''
@@ -79,7 +81,12 @@ loss: 1.7715743780136108
 accuracy: 0.35740000009536743
 
 LSTM
-ic| duration_time: 677.3160929679871
-loss: nan
-accuracy: 0.10000000149011612
+ic| duration_time: 461.7817986011505
+ic| loss[0]: 1.5526938438415527
+ic| loss[1]: 0.37720000743865967
+
+StandardScaler Conv1D
+ic| duration_time: 308.1324956417084
+ic| loss[0]: 0.3438631296157837
+ic| loss[1]: 0.9039000272750854
 '''

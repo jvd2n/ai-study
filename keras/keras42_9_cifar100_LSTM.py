@@ -49,8 +49,7 @@ from tensorflow.keras.callbacks import EarlyStopping
 es = EarlyStopping(monitor='loss', patience=20, mode='min', verbose=1)
 
 start_time = time.time()
-model.fit(x_train, y_train, epochs=20, batch_size=512, 
-          validation_split=0.1)
+model.fit(x_train, y_train, epochs=20, validation_split=0.2, batch_size=1024)
 duration_time = time.time() - start_time
 
 #4 Evaluate
@@ -74,5 +73,6 @@ loss: 1.7715743780136108
 accuracy: 0.35740000009536743
 
 LSTM
-
+ic| duration_time: 1253.9313232898712
+ic| loss: [nan, 0.009999999776482582]
 '''

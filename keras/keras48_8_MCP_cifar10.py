@@ -44,34 +44,38 @@ ic('********** OneHotEnc **********')
 ic(y_train.shape, y_test.shape)
 
 #2. Model
-from tensorflow.keras.models import Sequential, Model
+from tensorflow.keras.models import Sequential, Model, load_model
 from tensorflow.keras.layers import Dense, Input, Conv1D, Flatten, Dropout, GlobalAveragePooling1D, MaxPooling1D
 
-model = Sequential()
-model.add(Conv1D(filters=32, kernel_size=2, padding='same', activation='relu', input_shape=(32 * 32, 3)))
-model.add(Dropout(0.2))
-model.add(Conv1D(32, 2, padding='same', activation='relu'))
-model.add(MaxPooling1D())
-model.add(Conv1D(64, 2, padding='same', activation='relu'))
-model.add(Flatten())
-model.add(Dense(128, activation='relu'))
-model.add(Dense(64, activation='relu'))
-model.add(Dense(32, activation='relu'))
-model.add(Dense(10, activation='softmax'))
+# model = Sequential()
+# model.add(Conv1D(filters=32, kernel_size=2, padding='same', activation='relu', input_shape=(32 * 32, 3)))
+# model.add(Dropout(0.2))
+# model.add(Conv1D(32, 2, padding='same', activation='relu'))
+# model.add(MaxPooling1D())
+# model.add(Conv1D(64, 2, padding='same', activation='relu'))
+# model.add(Flatten())
+# model.add(Dense(128, activation='relu'))
+# model.add(Dense(64, activation='relu'))
+# model.add(Dense(32, activation='relu'))
+# model.add(Dense(10, activation='softmax'))
 
 #3 Compile, Train
-model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['acc'])
+# model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['acc'])
 
-from tensorflow.keras.callbacks import EarlyStopping
+from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 es = EarlyStopping(monitor='val_loss', patience=10, mode='min', verbose=1)
+cp = ModelCheckpoint(monitor='val_loss', save_best_only=True, mode='auto', 
+                     filepath='./_save/ModelCheckPoint/keras48_8_MCP_cifar10.hdf5')
 
 start_time = time.time()
-model.fit(x_train, y_train, epochs=10, batch_size=512, verbose=2, 
-          validation_split=0.15, callbacks=[es])
+# model.fit(x_train, y_train, epochs=10, batch_size=512, verbose=2, validation_split=0.2, callbacks=[es, cp])
 duration_time = time.time() - start_time
 
+# model.save('./_save/ModelCheckPoint/keras48_8_MCP_cifar10.h5')
+# model = load_model('./_save/ModelCheckPoint/keras48_8_MCP_cifar10.h5')   # save_model
+model = load_model('./_save/ModelCheckPoint/keras48_8_MCP_cifar10.hdf5')  # CheckPoint
+
 #4 Evaluate
-ic('================= EVALUATE ==================')
 loss = model.evaluate(x_test, y_test)   # evaluate -> return loss, metrics
 
 ic(duration_time)
@@ -101,4 +105,19 @@ StandardScaler Conv1D
 ic| duration_time: 317.79892349243164
 ic| loss[0]: 1.2282058000564575
 ic| loss[1]: 0.585099995136261
+
+save_model_h5
+ic| duration_time: 290.0993037223816
+ic| loss[0]: 1.379287838935852
+ic| loss[1]: 0.5784000158309937
+
+load_model_h5
+ic| duration_time: 0.0
+ic| loss[0]: 1.379287838935852
+ic| loss[1]: 0.5784000158309937
+
+ModelCheckPoint_hdf5
+ic| duration_time: 0.0
+ic| loss[0]: 1.2862415313720703
+ic| loss[1]: 0.5802000164985657
 '''

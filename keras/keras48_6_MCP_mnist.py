@@ -25,29 +25,35 @@ x_test = x_test.reshape(-1, x_test.shape[1], 1)
 ic(x_train.shape, x_test.shape)
 
 #2. 모델 구성
-from tensorflow.keras.models import Sequential, Model
+from tensorflow.keras.models import Sequential, Model, load_model
 from tensorflow.keras.layers import Dense, Input, Conv1D, Flatten, Dropout, GlobalAveragePooling1D, MaxPooling1D
 
-model = Sequential()
-model.add(Conv1D(filters=32, kernel_size=2, padding='same', activation='relu', input_shape=(13, 1)))
-model.add(Dropout(0.2))
-model.add(Conv1D(32, 2, padding='same', activation='relu'))
-model.add(MaxPooling1D())
-model.add(Conv1D(64, 2, padding='same', activation='relu'))
-model.add(Flatten())
-model.add(Dense(128, activation='relu'))
-model.add(Dense(64, activation='relu'))
-model.add(Dense(32, activation='relu'))
-model.add(Dense(1))
+# model = Sequential()
+# model.add(Conv1D(filters=32, kernel_size=2, padding='same', activation='relu', input_shape=(13, 1)))
+# model.add(Dropout(0.2))
+# model.add(Conv1D(32, 2, padding='same', activation='relu'))
+# model.add(MaxPooling1D())
+# model.add(Conv1D(64, 2, padding='same', activation='relu'))
+# model.add(Flatten())
+# model.add(Dense(128, activation='relu'))
+# model.add(Dense(64, activation='relu'))
+# model.add(Dense(32, activation='relu'))
+# model.add(Dense(1))
 
 # 3. 컴파일, 훈련
-from tensorflow.keras.callbacks import EarlyStopping
-es = EarlyStopping(monitor='loss', patience=20, mode='min', verbose=1)
+from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
+es = EarlyStopping(monitor='val_loss', patience=20, mode='min', verbose=1)
+cp = ModelCheckpoint(monitor='val_loss', save_best_only=True, mode='auto', 
+                     filepath='./_save/ModelCheckPoint/keras48_6_MCP_mnist.hdf5')
 
 start_time = time.time()
-model.compile(loss='mse', optimizer='adam')
-model.fit(x_train, y_train, epochs=100, batch_size=8, verbose=2, callbacks=[es])
+# model.compile(loss='mse', optimizer='adam')
+# model.fit(x_train, y_train, epochs=100, batch_size=8, verbose=2, validation_split=0.2, callbacks=[es, cp])
 duration_time = time.time() - start_time
+
+# model.save('./_save/ModelCheckPoint/keras48_6_MCP_mnist.h5')
+# model = load_model('./_save/ModelCheckPoint/keras48_6_MCP_mnist.h5')   # save_model
+model = load_model('./_save/ModelCheckPoint/keras48_6_MCP_mnist.hdf5')  # CheckPoint
 
 # 4. 평가, 예측
 loss = model.evaluate(x_test, y_test)
@@ -70,4 +76,19 @@ Standard Conv1D
 ic| duration_time: 2.403654098510742
 ic| loss: 0.015153853222727776
 ic| r2: 0.9761379732382586
+
+save_model_h5
+ic| duration_time: 2.2767889499664307
+ic| loss: 0.027489682659506798
+ic| r2: 0.9567133528942269
+
+load_model_h5
+ic| duration_time: 0.0
+ic| loss: 0.027489682659506798
+ic| r2: 0.9567133528942269
+
+ModelCheckPoint_hdf5
+ic| duration_time: 0.0
+ic| loss: 0.02264236845076084
+ic| r2: 0.9643461960120904
 '''

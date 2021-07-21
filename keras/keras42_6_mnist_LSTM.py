@@ -47,7 +47,6 @@ end_time = time.time()
 duration_time = end_time - start_time
 
 #4 Evaluate
-ic('================= EVALUATE ==================')
 loss = model.evaluate(x_test, y_test)   # evaluate -> return loss, metrics
 ic(duration_time)
 print(f'loss: {loss[0]}')

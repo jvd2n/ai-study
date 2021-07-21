@@ -84,7 +84,8 @@ loss: 1.7715743780136108
 accuracy: 0.35740000009536743
 
 LSTM
-
+ic| duration_time: 1253.9313232898712
+ic| loss: [nan, 0.009999999776482582]
 
 StandardScaler Conv1D
 ic| duration_time: 370.3385968208313

@@ -5,11 +5,14 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import os
 
+#1 Data
 stock_sk = pd.read_excel('./_data/SK주가 20210721.xls', 
                          index_col=None, header=0, usecols=[0,1,2,3,4,10])
 stock_ss = pd.read_excel('./_data/삼성전자 주가 20210721.xls', 
                          index_col=None, header=0, usecols=[0,1,2,3,4,10])
 
+
+# Preprocessing
 stock_sk.columns = ['date','Open','High','Low','Close','Volume']
 stock_ss.columns = ['date','Open','High','Low','Close','Volume']
 stock_sk = stock_sk.iloc[:2601,:]
@@ -42,7 +45,6 @@ df_ss = pd.DataFrame(scaled_ss, columns=scale_cols)
 
 from sklearn.model_selection import train_test_split
 x_train_sk, x_test_sk, y_train_sk, y_test_sk, x_train_ss, x_test_ss, y_train_ss, y_test_ss = train_test_split(df_sk, stock_sk['Close'], df_ss, stock_ss['Close'], test_size=0.2, random_state=32, shuffle=True)
-# x_train_ss, x_test_ss, y_train_ss, y_test_ss = train_test_split(df_ss.drop('Close', 1), df_ss['Close'], test_size=0.2, random_state=0, shuffle=False)
 
 x_train_sk = x_train_sk.to_numpy()
 x_test_sk = x_test_sk.to_numpy()
@@ -66,22 +68,10 @@ ic(x_test_ss.shape, y_test_ss.shape)
 # ic(y_train_sk.shape, y_test_sk.shape)
 # ic(y_train_ss.shape, y_test_ss.shape)
 
+
+#2 Modeling
 from tensorflow.keras.models import Sequential, Model
 from tensorflow.keras.layers import Dense, Input, LSTM, Conv1D, Dropout, MaxPooling1D, Flatten
-
-# model = Sequential()
-# model.add(Conv1D(filters=32, kernel_size=2, padding='same', activation='relu', input_shape=(4, 1)))
-# model.add(Dropout(0.2))
-# model.add(Conv1D(32, 2, padding='same', activation='relu'))
-# model.add(MaxPooling1D())
-# model.add(Conv1D(64, 2, padding='same', activation='relu'))
-# model.add(Flatten())
-# model.add(Dense(128, activation='relu'))
-# model.add(Dense(64, activation='relu'))
-# model.add(Dense(32, activation='relu'))
-# model.add(Dense(1))
-
-#2. Modeling
 input1 = Input(shape=(4, 1))
 xx = LSTM(64, activation='relu')(input1)
 xx = Dense(32, activation='relu')(xx)
@@ -102,15 +92,15 @@ merge2 = Dense(10)(merge1)
 merge3 = Dense(5, activation='relu')(merge2)
 last_output = Dense(1)(merge3)
 
-# model = Model(inputs=[input1, input2], outputs=[output1, output2])
 model = Model(inputs=[input1, input2], outputs=last_output)
 
-model.summary()
+# model.summary()
 
+
+#3 Compile / Train
 model.compile(loss='mse', optimizer='adam', metrics=['acc'])
 
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
-# es = EarlyStopping(monitor='loss', patience=5, mode='min', verbose=1)
 es = EarlyStopping(monitor='val_loss', patience=10, mode='min', verbose=1, restore_best_weights=True)
 
 #########################################################################
@@ -123,13 +113,14 @@ filename = '.{epoch:04d}-{val_loss:.4f}.hdf5'
 modelpath = "".join([filepath, "SAMSUNG_", date_time, "_", filename])
 #########################################################################
 
-cp = ModelCheckpoint(monitor='val_loss', mode='min', verbose=1,
-                    save_best_only=True, filepath=modelpath)
+cp = ModelCheckpoint(monitor='val_loss', mode='min', verbose=1, save_best_only=True, filepath=modelpath)
 
 model.save('./samsung/_save/ModelCheckPoint/SAMSUNG_MCP.h5')
 
 model.fit([x_train_sk, x_train_ss], y_train_ss, epochs=100, batch_size=32, validation_split=0.2, callbacks=[es, cp])
 
+
+#4 Evaluate / Predict
 from sklearn.metrics import r2_score
 loss = model.evaluate([x_test_sk, x_test_ss], y_test_ss)   # evaluate -> return loss, metrics
 pred = model.predict([x_test_sk, x_test_ss])

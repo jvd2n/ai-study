@@ -24,6 +24,9 @@ ic(x_train.shape, x_test.shape)
 x_train = x_train.reshape(-1, x_train.shape[1], 1)
 x_test = x_test.reshape(-1, x_test.shape[1], 1)
 
+ic(x_train.shape, x_test.shape)
+ic(y_train.shape, y_test.shape)
+
 # 2. model 구성
 from tensorflow.keras.models import Sequential, Model
 from tensorflow.keras.layers import Dense, Input, Conv1D, Flatten, Dropout, GlobalAveragePooling1D, MaxPooling1D

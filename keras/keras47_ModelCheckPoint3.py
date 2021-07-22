@@ -68,7 +68,7 @@ filename = '.{epoch:04d}-{val_loss:.4f}.hdf5'
 modelpath = "".join([filepath, "k47_", date_time, "_", filename])
 ############################################################################
 
-mcp = ModelCheckpoint(monitor='val_loss',
+cp = ModelCheckpoint(monitor='val_loss',
                     mode='auto', 
                     verbose=1, 
                     save_best_only=True, 
@@ -77,7 +77,7 @@ mcp = ModelCheckpoint(monitor='val_loss',
 
 model.save('./_save/ModelCheckPoint/keras47_model_save.h5')
 
-model.fit([x1_train, x2_train], y_train, epochs=100, batch_size=4, validation_split=0.2, verbose=1, callbacks=[es, mcp])
+model.fit([x1_train, x2_train], y_train, epochs=100, batch_size=2, validation_split=0.2, verbose=1, callbacks=[es, cp])
 
 
 #4. 평가, 예측

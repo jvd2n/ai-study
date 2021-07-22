@@ -5,14 +5,12 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import os
 
-#1 Data
+#1 Data / Preprocessing
 stock_sk = pd.read_excel('./_data/SK주가 20210721.xls', 
                          index_col=None, header=0, usecols=[0,1,2,3,4,10])
 stock_ss = pd.read_excel('./_data/삼성전자 주가 20210721.xls', 
                          index_col=None, header=0, usecols=[0,1,2,3,4,10])
 
-
-# Preprocessing
 stock_sk.columns = ['date','Open','High','Low','Close','Volume']
 stock_ss.columns = ['date','Open','High','Low','Close','Volume']
 stock_sk = stock_sk.iloc[:2601,:]
@@ -70,8 +68,8 @@ ic(x_test_ss.shape, y_test_ss.shape)
 
 
 #2 Modeling
-from tensorflow.keras.models import Sequential, Model
-from tensorflow.keras.layers import Dense, Input, LSTM, Conv1D, Dropout, MaxPooling1D, Flatten
+from tensorflow.keras.models import Model
+from tensorflow.keras.layers import Dense, Input, LSTM
 input1 = Input(shape=(4, 1))
 xx = LSTM(64, activation='relu')(input1)
 xx = Dense(32, activation='relu')(xx)

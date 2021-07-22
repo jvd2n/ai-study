@@ -131,6 +131,13 @@ ic('loss[mse] / metrics[acc]')
 ic(loss)
 ic(r2)
 
+'''
+ic| pred[:1]: array([[81262.59]], dtype=float32)
+ic| 'loss[mse] / metrics[acc]'
+ic| loss: [351261.5, 0.0]
+ic| r2: 0.998695234433801
+'''
+
 # 5. Visualization
 # plt.figure(figsize=(16,9))
 # sns.lineplot(y=stock_ss['Close'], x=stock_ss.index)

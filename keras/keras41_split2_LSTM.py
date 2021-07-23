@@ -50,7 +50,7 @@ x_predict = scaler.transform(x_predict)
 x_train = x_train.reshape(x_train.shape[0], x_train.shape[1], 1)
 x_test = x_test.reshape(x_test.shape[0], x_test.shape[1], 1)
 x_predict = x_predict.reshape(x_predict.shape[0], x_predict.shape[1], 1)
-
+ic(x_train.shape, x_test.shape, x_predict.shape)
 # from tensorflow.keras.utils import to_categorical
 # y_train = to_categorical(y_train)
 # y_test = to_categorical(y_test)
@@ -68,7 +68,7 @@ model = Model(inputs=input1, outputs=output1)
 
 #3. Compile, Train
 model.compile(loss='mse', optimizer='adam')
-model.fit(x_train, y_train, epochs=1000, batch_size=64, validation_split=0.02, verbose=2)
+model.fit(x_train, y_train, epochs=100, batch_size=64, validation_split=0.02, verbose=2)
 
 #4. Evaluate, Predict
 loss = model.evaluate(x_test, y_test)

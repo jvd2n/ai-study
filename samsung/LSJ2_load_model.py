@@ -83,57 +83,10 @@ ic(test_feature_sk.shape, test_label_sk.shape)
 
 ic(test_feature_ss, test_label_ss)
 
-
-#2 Modeling
-from tensorflow.keras.models import Model
-from tensorflow.keras.layers import Dense, Input, LSTM, Flatten
-input1 = Input(shape=(train_feature_ss.shape[1], train_feature_ss.shape[2]))
-xx = LSTM(units=100, activation='relu', return_sequences=False)(input1)
-xx = Dense(32, activation='relu')(xx)
-xx = Dense(8, activation='relu')(xx)
-output1 = Dense(1)(xx)
-model = Model(inputs=input1, outputs=output1)
-
-input2 = Input(shape=(train_feature_sk.shape[1], train_feature_sk.shape[2]))
-xx = LSTM(units=100, activation='relu', return_sequences=False)(input2)
-xx = Dense(32, activation='relu')(xx)
-xx = Dense(8, activation='relu')(xx)
-output2 = Dense(1)(xx)
-model = Model(inputs=input2, outputs=output2)
-
-from tensorflow.keras.layers import Concatenate
-merge1 = Concatenate(axis=1)([output1, output2])
-merge2 = Dense(10)(merge1)
-merge3 = Dense(5, activation='relu')(merge2)
-last_output = Dense(1)(merge3)
-
-model = Model(inputs=[input1, input2], outputs=last_output)
-
-# model.summary()
-
-
-#3 Compile / Train
-model.compile(loss='mse', optimizer='adam')
-
-from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
-es = EarlyStopping(monitor='val_loss', patience=10, mode='min', verbose=1, restore_best_weights=True)
-
-#########################################################################
-import datetime
-date = datetime.datetime.now()
-date_time = date.strftime("%y%m%d_%H%M")
-
-filepath = './samsung/_save/ModelCheckPoint/' + date_time + '/'
-filename = '.{epoch:04d}-{val_loss:.4f}.hdf5'
-modelpath = "".join([filepath, "SAMSUNG2_", date_time, "_", filename])
-#########################################################################
-
-cp = ModelCheckpoint(monitor='val_loss', mode='min', verbose=1, save_best_only=True, filepath=modelpath)
-
-model.save('./samsung/_save/ModelCheckPoint/SAMSUNG2_MCP.h5')
-
-model.fit([train_feature_ss, train_feature_sk], [train_label_ss, train_label_sk], epochs=100, batch_size=32, validation_split=0.1, callbacks=[es, cp])
-
+from keras.models import load_model
+# model = load_model('D:\study\samsung\_save\ModelCheckPoint\SAMSUNG2_210724_2114_.0054-35199976.0000.hdf5')
+# model = load_model('D:\study\samsung\_save\ModelCheckPoint\SAMSUNG2_210724_2121_.0027-35105820.0000.hdf5')
+model = load_model('D:\study\samsung\_save\ModelCheckPoint\SAMSUNG2_210724_2309_.0051-40121096.0000.hdf5')
 
 #4 Evaluate / Predict
 loss = model.evaluate([test_feature_ss, test_feature_sk], test_label_ss)   # evaluate -> return loss, metrics
@@ -144,19 +97,8 @@ ic(pred[-1])
 ic(loss)
 
 '''
-SAMSUNG2_210724_2114_.0054-35199976.0000.hdf5
-ic| pred[-1]: array([80085.04], dtype=float32)
-ic| loss: 4296143.5
-
-SAMSUNG2_210724_2121_.0027-35105820.0000.hdf5
-ic| pred[-1]: array([79863.055], dtype=float32)
-ic| loss: 152255904.0
-
-SAMSUNG2_210724_2309_.0051-40121096.0000.hdf5
 ic| pred[-1]: array([79628.04], dtype=float32)
 ic| loss: 4269286.0
-
-
 '''
 # 5. Visualization
 # plt.figure(figsize=(16,9))

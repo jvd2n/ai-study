@@ -144,8 +144,8 @@ ic(pred[-1])
 ic(loss)
 
 '''
-ic| pred[-1]: array([79023.03], dtype=float32)
-ic| loss: 3808590.25
+ic| pred[-1]: array([81831.69], dtype=float32)
+ic| loss: 18167576.0
 '''
 # 5. Visualization
 # plt.figure(figsize=(16,9))

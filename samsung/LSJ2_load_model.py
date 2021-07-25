@@ -84,12 +84,11 @@ ic(test_feature_sk.shape, test_label_sk.shape)
 ic(test_feature_ss, test_label_ss)
 
 from keras.models import load_model
-# model = load_model('D:\study\samsung\_save\ModelCheckPoint\SAMSUNG2_210724_2114_.0054-35199976.0000.hdf5')
-# model = load_model('D:\study\samsung\_save\ModelCheckPoint\SAMSUNG2_210724_2121_.0027-35105820.0000.hdf5')
-model = load_model('D:\study\samsung\_save\ModelCheckPoint\SAMSUNG2_210724_2309_.0051-40121096.0000.hdf5')
+model = load_model('D:\study\samsung\_save\ModelCheckPoint\SAMSUNG2_210725_2240_.0008-35030716.0000.hdf5')
+
 
 #4 Evaluate / Predict
-loss = model.evaluate([test_feature_ss, test_feature_sk], test_label_ss)   # evaluate -> return loss, metrics
+loss = model.evaluate([test_feature_ss, test_feature_sk], test_label_ss)
 pred = model.predict([test_feature_ss, test_feature_sk])
 
 ic(pred[-1])
@@ -97,8 +96,8 @@ ic(pred[-1])
 ic(loss)
 
 '''
-ic| pred[-1]: array([79628.04], dtype=float32)
-ic| loss: 4269286.0
+ic| pred[-1]: array([79278.16], dtype=float32)
+ic| loss: 3485549.5
 '''
 # 5. Visualization
 # plt.figure(figsize=(16,9))

@@ -144,19 +144,17 @@ ic(pred[-1])
 ic(loss)
 
 '''
-SAMSUNG2_210724_2114_.0054-35199976.0000.hdf5
-ic| pred[-1]: array([80085.04], dtype=float32)
-ic| loss: 4296143.5
-
-SAMSUNG2_210724_2121_.0027-35105820.0000.hdf5
-ic| pred[-1]: array([79863.055], dtype=float32)
-ic| loss: 152255904.0
-
 SAMSUNG2_210724_2309_.0051-40121096.0000.hdf5
 ic| pred[-1]: array([79628.04], dtype=float32)
 ic| loss: 4269286.0
 
+SAMSUNG2_210725_0650_.0053-40480256.0000.hdf5
+ic| pred[-1]: array([79081.06], dtype=float32)
+ic| loss: 4521749.5
 
+SAMSUNG2_210725_2240_.0008-35030716.0000.hdf5
+ic| pred[-1]: array([79278.16], dtype=float32)
+ic| loss: 3485549.5
 '''
 # 5. Visualization
 # plt.figure(figsize=(16,9))

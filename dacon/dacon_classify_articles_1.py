@@ -33,7 +33,7 @@ print("Article's Avg Length: ", sum(map(len, x_train)) / len(x_train))  # 27.33
 # Preprocessing
 from tensorflow.keras.preprocessing.text import Tokenizer
 # token = Tokenizer(num_words=2000)
-token = Tokenizer()
+token = Tokenizer(num_words=2000)
 token.fit_on_texts(x_train)
 seq_train = token.texts_to_sequences(x_train)
 seq_test = token.texts_to_sequences(x_test)
@@ -45,8 +45,8 @@ ic(np.unique(seq_train))
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.utils import to_categorical
 
-x_train = pad_sequences(seq_train, padding='post', maxlen=14)
-x_test = pad_sequences(seq_test, padding='post', maxlen=14)
+x_train = pad_sequences(seq_train, padding='pre', maxlen=14)
+x_test = pad_sequences(seq_test, padding='pre', maxlen=14)
 
 ic(x_train.shape, x_test.shape) # (45654, 14) (9131, 14)
 
@@ -63,8 +63,6 @@ from tensorflow.keras.callbacks import EarlyStopping
 model = Sequential()
 model.add(Embedding(2000, 200, input_length=14))
 model.add(Bidirectional(LSTM(units=128, return_sequences=True)))
-model.add(Bidirectional(LSTM(units=64, return_sequences=True)))
-model.add(Bidirectional(LSTM(units=64, return_sequences=True)))
 model.add(Bidirectional(LSTM(units=64, return_sequences=True)))
 model.add(Bidirectional(LSTM(units=32)))
 model.add(Dense(7, activation='softmax'))
@@ -90,4 +88,4 @@ ic(submission.shape)
 
 import datetime
 date_time = datetime.datetime.now().strftime("%y%m%d_%H%M")
-submission.to_csv(PATH + 'MUTEN_SUB_' + date_time + '.csv', index=False)
+submission.to_csv(PATH + 'MUTEN_SUB_1_' + date_time + '.csv', index=False)

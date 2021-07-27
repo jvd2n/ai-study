@@ -42,19 +42,17 @@ ic(y_train.shape, y_test.shape)
 
 #2. Model
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Conv2D, Flatten, MaxPool2D
+from tensorflow.keras.layers import Dense, Conv2D, Flatten, MaxPool2D, Dropout
 
 model = Sequential()
 model.add(Conv2D(filters=30, kernel_size=(2, 2), padding='same', input_shape=(28, 28, 1)))
+model.add(Dropout(0.8))
 model.add(Conv2D(20, (2, 2), activation='relu'))            # (N, 9, 9, 20)
 model.add(Conv2D(30, (2, 2), padding='valid'))              # (N, 8, 8, 30)
 model.add(MaxPool2D())                                      # (N, 4, 4, 30)
 model.add(Conv2D(15, (2,2)))
 model.add(Flatten())                                        # (N, 480)
-model.add(Dense(256, activation='relu'))
 model.add(Dense(128, activation='relu'))
-model.add(Dense(128, activation='relu'))
-model.add(Dense(64, activation='relu'))
 model.add(Dense(64, activation='relu'))
 model.add(Dense(32, activation='relu'))
 model.add(Dense(10, activation='softmax'))
@@ -62,12 +60,11 @@ model.add(Dense(10, activation='softmax'))
 # model.summary()
 
 #3 Compile, Train   metrics=['accuracy']
-# model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
-model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+# model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['acc'])
+model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['acc'])
 
 from tensorflow.keras.callbacks import EarlyStopping, TensorBoard
-# es = EarlyStopping(monitor='loss', patience=5, mode='min', verbose=1)
-es = EarlyStopping(monitor='val_loss', patience=30, mode='min', verbose=1)
+es = EarlyStopping(monitor='val_loss', patience=7, mode='min', verbose=1)
 tb = TensorBoard(log_dir='./_save/_graph/', histogram_freq=0, write_graph=True, write_images=True)
 
 import time

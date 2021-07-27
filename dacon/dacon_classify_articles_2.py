@@ -52,10 +52,11 @@ from tensorflow.keras.callbacks import EarlyStopping
 model = Sequential()
 model.add(Dense(128, input_dim=150000, activation='relu'))
 model.add(Dropout(0.8))
+model.add(Dense(64, activation='relu'))
 model.add(Dense(7, activation='softmax'))
 
 model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['acc'])
-model.fit(train_tf_text[:40000], train_label[:40000], epochs=3, batch_size=32, validation_data=(train_tf_text[40000:], train_label[40000:]))
+model.fit(train_tf_text[:40000], train_label[:40000], epochs=10, batch_size=32, validation_data=(train_tf_text[40000:], train_label[40000:]))
 
 
 # Predict

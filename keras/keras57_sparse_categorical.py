@@ -74,7 +74,6 @@ model.fit(x_train, y_train, epochs=100, batch_size=64, verbose=2,
 
 
 #4 Evaluate
-ic('================= EVALUATE ==================')
 loss = model.evaluate(x_test, y_test)   # evaluate -> return loss, metrics
 print(f'loss: {loss[0]}')
 print(f'accuracy: {loss[1]}')

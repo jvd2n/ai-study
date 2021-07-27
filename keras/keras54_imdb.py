@@ -18,10 +18,11 @@ ic(type(x_train))
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.utils import to_categorical
 
-x_train = pad_sequences(x_train, maxlen=100, padding='pre')
-x_test = pad_sequences(x_test, maxlen=100, padding='pre')
+x_train = pad_sequences(x_train, maxlen=500, padding='pre')
+x_test = pad_sequences(x_test, maxlen=500, padding='pre')
 ic(x_train.shape, x_test.shape)
 ic(type(x_train), type(x_train[0]))
+# ic(x_train[1])
 
 word_to_index = imdb.get_word_index()
 index_to_word={}
@@ -36,39 +37,38 @@ for index, token in enumerate(("<pad>", "<sos>", "<unk>")):
 
 print(' '.join([index_to_word[index] for index in x_train[0]]))
 
-
-# Preprocessing
-from tensorflow.keras.preprocessing.sequence import pad_sequences
-from tensorflow.keras.utils import to_categorical
-
-x_train = pad_sequences(x_train, maxlen=500, padding='pre')
-x_test = pad_sequences(x_test, maxlen=500, padding='pre')
-ic(x_train.shape, x_test.shape)
-ic(type(x_train), type(x_train[0]))
-ic(x_train[1])
-
-ic(np.unique(y_train))
-ic(y_train[2])
-# y_train = to_categorical(y_train)
-# y_test = to_categorical(y_test)
-ic(y_train.shape, y_test.shape)
-ic(y_train[2])
+# ic(np.unique(y_train))
+# ic(y_train[2])
+# # y_train = to_categorical(y_train)
+# # y_test = to_categorical(y_test)
+# ic(y_train.shape, y_test.shape)
+# ic(y_train[2])
 
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, GRU, Embedding
+from tensorflow.keras.layers import Dense, LSTM, GRU, Embedding
 
 model = Sequential()
 model.add(Embedding(10000, 100))
+# model.add(LSTM(128))
 model.add(GRU(128))
-model.add(Dense(1, activation='sigmoid'))
+model.add(Dense(1, activation='sigmoid'))   # 이진분류 역시 다중분류이다.
+
+model.summary()
 
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 
 es = EarlyStopping(monitor='val_loss', mode='min', verbose=1, patience=5)
-# cp = ModelCheckpoint('keras54_imdb.h5', monitor='val_acc', mode='max', verbose=1, save_best_only=True)
+cp = ModelCheckpoint(filepath='./_save/keras54_imdb.h5', monitor='val_acc', mode='max', verbose=1, save_best_only=True)
 
-model.compile(optimizer='rmsprop', loss='binary_crossentropy', metrics=['acc'])
-model.fit(x_train, y_train, epochs=30, batch_size=32, callbacks=[es], validation_split=0.2)
+model.compile(loss='binary_crossentropy', optimizer='rmsprop', metrics=['acc'])
+model.fit(x_train, y_train, epochs=20, batch_size=128, callbacks=[es, cp], validation_split=0.2)
 
 acc = model.evaluate(x_train, y_train)[1]
 ic(acc)
+
+'''
+ic| acc: 0.9581599831581116
+ic| acc: 0.9743599891662598
+ic| acc: 0.9704399704933167
+'''
+

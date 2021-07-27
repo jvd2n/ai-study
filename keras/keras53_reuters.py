@@ -63,4 +63,4 @@ model.fit(x_train, y_train, epochs=100, batch_size=32, callbacks=[es], validatio
 
 #4 Evaluate, Predict
 acc = model.evaluate(x_train, y_train)[1]
-print("acc: ", acc)
+ic(acc)

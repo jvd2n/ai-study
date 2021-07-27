@@ -56,12 +56,16 @@ model.add(Dense(64, activation='relu'))
 model.add(Dense(7, activation='softmax'))
 
 model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['acc'])
-model.fit(train_tf_text[:40000], train_label[:40000], epochs=10, batch_size=32, validation_data=(train_tf_text[40000:], train_label[40000:]))
 
+import time
+start_time = time.time()
+model.fit(train_tf_text[:40000], train_label[:40000], epochs=5, batch_size=128, validation_data=(train_tf_text[40000:], train_label[40000:]))
+# model.fit(train_tf_text, train_label, epochs=5, batch_size=128, validation_split=0.2)
+duration_time = time.time() - start_time
 
 # Predict
-tmp_predict = model.predict(test_tf_text)
-pred = np.argmax(tmp_predict, axis=1)
+y_predict = model.predict(test_tf_text)
+y_predict = np.argmax(y_predict, axis=1)
 
 # Results make to_csv submissions
 # ic(len(test_tf_text))
@@ -69,10 +73,11 @@ pred = np.argmax(tmp_predict, axis=1)
 # for i in range(len(test_tf_text)):
 #     topic.append(np.argmax(test_tf_text[i]))   # np.argmax -> 최대값의 색인 위치
 
-submission['topic_idx'] = pred
+submission['topic_idx'] = y_predict
 ic(submission.shape)
+ic(duration_time)
 
 import datetime
 OUT_PATH = './dacon/_output/'
 date_time = datetime.datetime.now().strftime("%y%m%d_%H%M")
-submission.to_csv(OUT_PATH + 'CLSFY_ART_SUB_2_' + date_time + '.csv', index=False)
+submission.to_csv(OUT_PATH + 'CLSFY_ATC_SUB_2_' + date_time + '.csv', index=False)

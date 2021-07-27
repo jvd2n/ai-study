@@ -88,4 +88,4 @@ ic(submission.shape)
 
 import datetime
 date_time = datetime.datetime.now().strftime("%y%m%d_%H%M")
-submission.to_csv(PATH + 'CLSFY_ART_SUB_1_' + date_time + '.csv', index=False)
+submission.to_csv(PATH + 'CLSFY_ATC_SUB_1_' + date_time + '.csv', index=False)

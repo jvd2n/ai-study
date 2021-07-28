@@ -71,7 +71,7 @@ ic(hist)
 acc = hist.history['acc']
 val_acc = hist.history['val_acc']
 loss = hist.history['loss']
-val_loss = hist.history['val_acc']
+val_loss = hist.history['val_loss']
 
 # Visualization
 ic(acc[-1])

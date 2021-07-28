@@ -22,7 +22,7 @@ xy_train = train_datagen.flow_from_directory(
 )
 # Found 160 images belonging to 2 classes.
 
-xy_test = train_datagen.flow_from_directory(
+xy_test = test_datagen.flow_from_directory(
     '../data/brain/test',
     target_size=(150, 150),
     batch_size=200,   # xy_train[0]의 ,5(batch_size) 크기로 생성

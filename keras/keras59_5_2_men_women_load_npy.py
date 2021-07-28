@@ -34,11 +34,9 @@ model.add(InputLayer(input_shape=(150, 150, 3)))
 model.add(Conv2D(16, (3, 3), (1, 1), 'same', activation='relu'))
 model.add(MaxPooling2D((2, 2)))
 model.add(Dropout(0.5))
-
 model.add(Conv2D(32, (3, 3), (1, 1), 'same', activation='relu'))
 model.add(MaxPooling2D((2, 2)))
 model.add(Dropout(0.5))
-
 model.add(Flatten())
 model.add(Dense(256, activation='relu'))
 model.add(Dense(128, activation='relu'))
@@ -57,7 +55,7 @@ es = EarlyStopping(monitor='val_loss', patience=10, mode='min', verbose=1)
 
 hist = model.fit(
     x_train, y_train,
-    epochs=300,
+    epochs=50,
     steps_per_epoch=32,
     validation_steps=4,
     validation_data=(x_valid, y_valid),
@@ -74,10 +72,30 @@ ic(val_acc[-1])
 ic(loss[-1])
 ic(val_loss[-1])
 
-
 y_pred = model.predict(x_test)
 ic(y_pred)
 
+for i, j in enumerate(y_pred):
+    if j >= 0.5:
+        chance = round(j[0]*100, 1)
+        print(f'{i+1}. Classified/ WOMEN with {chance}%')
+    else:
+        chance = round((1-j[0])*100, 1)
+        print(f'{i+1}. Classified/ MEN with {chance}%')
+
+# ic(y_pred)
+'''
+ic| acc[-1]: 0.8217522501945496
+ic| val_acc[-1]: 0.6096823215484619
+ic| loss[-1]: 0.37846890091896057
+ic| val_loss[-1]: 0.8057641386985779
+ic| y_pred: array([[0.5404332 ],
+                   [0.47137678],
+                   [0.04922736]], dtype=float32)
+1. Classified/ WOMEN with 54.0%
+2. Classified/ MEN with 52.9%
+3. Classified/ MEN with 95.1%
+'''
 '''
 pred_x = []
 from tensorflow.keras.preprocessing import image

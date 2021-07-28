@@ -20,7 +20,9 @@ valid_idg = ImageDataGenerator(
     validation_split=0.2,
 )
 
-test_idg = ImageDataGenerator(rescale=1./255)
+test_idg = ImageDataGenerator(
+    rescale=1./255,
+)
 
 train_gen = train_idg.flow_from_directory(
     '../data/men_women',

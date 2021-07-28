@@ -1,7 +1,3 @@
-# 1 validation_steps ?
-# 2 men women data -> Modeling
-# 본인 사진으로 predict 하기
-
 import numpy as np
 from icecream import ic
 from tensorflow.keras.preprocessing.image import ImageDataGenerator

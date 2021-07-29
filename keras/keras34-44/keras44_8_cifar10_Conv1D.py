@@ -71,7 +71,6 @@ model.fit(x_train, y_train, epochs=10, batch_size=512, verbose=2,
 duration_time = time.time() - start_time
 
 #4 Evaluate
-ic('================= EVALUATE ==================')
 loss = model.evaluate(x_test, y_test)   # evaluate -> return loss, metrics
 
 ic(duration_time)

@@ -15,10 +15,10 @@ train_idg = ImageDataGenerator(
     validation_split=0.2,
 )
 
-valid_idg = ImageDataGenerator(
-    rescale=1./255,
-    validation_split=0.2,
-)
+# valid_idg = ImageDataGenerator(
+#     rescale=1./255,
+#     validation_split=0.2,
+# )
 
 test_idg = ImageDataGenerator(
     rescale=1./255,
@@ -33,7 +33,8 @@ train_gen = train_idg.flow_from_directory(
 )
 # Found 2648 images belonging to 2 classes.
 
-valid_gen = valid_idg.flow_from_directory(
+# valid_gen = valid_idg.flow_from_directory(
+valid_gen = train_idg.flow_from_directory(
     '../data/men_women',
     target_size=(150, 150),
     batch_size=1000,

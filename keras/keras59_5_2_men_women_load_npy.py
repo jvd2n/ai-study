@@ -15,9 +15,9 @@ x_test = np.load('./_save/_npy/k59_5_test_x.npy')
 y_test = np.load('./_save/_npy/k59_5_test_y.npy')
 
 ic(x_train.shape)    # (2648, 150, 150, 3)
-ic(y_train.shape)    # (2648, 2)
+ic(y_train.shape)    # (2648,)
 ic(x_valid.shape)    # (661, 150, 150, 3)
-ic(y_valid.shape)    # (661, 2)
+ic(y_valid.shape)    # (661,)
 ic(x_test.shape)     # (3, 150, 150, 3)
 ic(y_test.shape)     # (3,)
 

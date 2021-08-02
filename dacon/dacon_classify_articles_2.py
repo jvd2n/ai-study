@@ -32,7 +32,13 @@ test_text = test["cleaned_title"].tolist()
 
 train_label = np.asarray(train.topic_idx)
 
-tfidf = TfidfVectorizer(analyzer='word', sublinear_tf=True, ngram_range=(1, 2), max_features=150000, binary=False)
+tfidf = TfidfVectorizer(
+    analyzer='char_wb', 
+    sublinear_tf=True, 
+    ngram_range=(1, 2), 
+    max_features=45000, 
+    binary=False,
+)
 
 tfidf.fit(train_text)
 
@@ -50,7 +56,7 @@ from tensorflow.keras.layers import Dense, LSTM, Embedding, Bidirectional, Dropo
 from tensorflow.keras.callbacks import EarlyStopping
 
 model = Sequential()
-model.add(Dense(128, input_dim=150000, activation='relu'))
+model.add(Dense(128, input_dim=45000, activation='relu'))
 model.add(Dropout(0.8))
 model.add(Dense(64, activation='relu'))
 model.add(Dense(7, activation='softmax'))

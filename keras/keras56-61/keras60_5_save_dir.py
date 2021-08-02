@@ -26,7 +26,7 @@ train_datagen = ImageDataGenerator(
 # 2 파일에서 가져오려면 -> flow_from_directory()    // x, y가 tuple 형태로 뭉쳐있음
 # 3 데이터에서 땡겨오려면 -> flow()                 // x, y가 나뉘어있음
 
-augment_size = 10
+augment_size = 40000
 
 randidx = np.random.randint(x_train.shape[0], size=augment_size)
 ic(x_train.shape[0])     # 60000

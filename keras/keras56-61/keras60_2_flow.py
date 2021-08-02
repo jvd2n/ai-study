@@ -55,3 +55,4 @@ x_train = np.concatenate((x_train, x_augmented))
 y_train = np.concatenate((y_train, y_augmented))
 
 ic(x_train.shape, y_train.shape)    # (100000, 28, 28, 1), (100000,)
+ic(y_train[-20:])

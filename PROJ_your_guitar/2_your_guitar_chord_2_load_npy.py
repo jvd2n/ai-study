@@ -1,19 +1,12 @@
-# np.save('./_save/_npy/ygc_train_x.npy', arr=train_gen[0][0])
-# np.save('./_save/_npy/ygc_train_y.npy', arr=train_gen[0][1])
-# np.save('./_save/_npy/ygc_valid_x.npy', arr=valid_gen[0][0])
-# np.save('./_save/_npy/ygc_valid_y.npy', arr=valid_gen[0][1])
-# np.save('./_save/_npy/ygc_test_x.npy', arr=test_gen[0][0])
-# np.save('./_save/_npy/ygc_test_y.npy', arr=test_gen[0][1])
-
 import time
 import numpy as np
 from icecream import ic
-x_train = np.load('./_save/_npy/ygc_train_x.npy')
-y_train = np.load('./_save/_npy/ygc_train_y.npy')
-x_valid = np.load('./_save/_npy/ygc_valid_x.npy')
-y_valid = np.load('./_save/_npy/ygc_valid_y.npy')
-x_test = np.load('./_save/_npy/ygc_test_x.npy')
-y_test = np.load('./_save/_npy/ygc_test_y.npy')
+x_train = np.load('./_save/_npy/ygc_aug_train_x.npy')
+y_train = np.load('./_save/_npy/ygc_aug_train_y.npy')
+x_valid = np.load('./_save/_npy/ygc_aug_valid_x.npy')
+y_valid = np.load('./_save/_npy/ygc_aug_valid_y.npy')
+x_test = np.load('./_save/_npy/ygc_aug_test_x.npy')
+y_test = np.load('./_save/_npy/ygc_aug_test_y.npy')
 
 ic(x_train.shape)    # (10762, 150, 150, 3)
 ic(y_train.shape)    # (10762, 14)
@@ -127,7 +120,7 @@ model.compile(
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 es = EarlyStopping(
     monitor='val_loss', 
-    patience=3, 
+    patience=5, 
     mode='min', 
     verbose=1, 
     restore_best_weights=True,
@@ -156,13 +149,13 @@ model.save(filepath + 'YGC_MCP.h5')
 start_time = time.time()
 hist = model.fit(
     x_train, y_train,
-    epochs=77,
+    epochs=30,
     verbose=2,
     # batch_size=2,
     steps_per_epoch=4,
     validation_data=(x_valid, y_valid),
     validation_steps=8,
-    callbacks=[mcp],
+    callbacks=[es, mcp],
 )
 end_time = time.time() - start_time
 
@@ -191,6 +184,14 @@ for i, j in enumerate(y_pred):
     results.append(np.argmax(y_pred[i]) == np.argmax(y_test[i]))
     ic(np.argmax(y_pred[i]), np.argmax(y_test[i]))
 ic(results)
+
+t_res = 0
+for result in results:
+    if result == True:
+        t_res = t_res + 1
+correct_answer_rate = round((t_res / len(results) * 100), 2)
+print(correct_answer_rate, '%')
+
 # for i, j in enumerate(y_pred):
 #     if j >= 0.5:
 #         chance = round(j[0]*100, 1)
@@ -200,6 +201,31 @@ ic(results)
 #         print(f'{i+1}. Classified/ MEN with {chance}%')
 
 # ic(y_pred)
+
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(13,6))
+plt.rc('font', family='NanumGothic')
+# print(plt.rcParams['font.family'])
+
+plt.subplot(121)
+plt.plot(hist.history['acc'], 'r')
+plt.plot(hist.history['val_acc'], 'c')
+plt.title('acc, val_acc')
+plt.xlabel('epochs')
+plt.ylabel('acc, val_acc')
+plt.legend(['train_acc', 'val_acc'])
+
+plt.subplot(122)
+plt.plot(hist.history['loss'], 'r')
+plt.plot(hist.history['val_loss'], 'c')
+plt.title('loss, val_loss')
+plt.xlabel('epochs')
+plt.ylabel('loss, val_loss')
+plt.legend(['train_loss', 'val_loss'])
+
+plt.show()
+
 '''
 ic| acc[-1]: 0.8217522501945496
 ic| val_acc[-1]: 0.6096823215484619

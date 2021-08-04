@@ -18,15 +18,16 @@ topic_dict = pd.read_csv(IN_PATH + 'topic_dict.csv')
 ic(train, test)
 
 def clean_text(sent):    
-    okt = Okt()
-    sent_clean = okt.normalize(sent)
-    clean_words = []
-    for word in okt.pos(sent_clean, stem=True):
-        if word[1] in ['Noun', 'Verb', 'Adjective']:
-            clean_words.append(word[0])
-    sent_clean = ' '.join(clean_words)
+    # okt = Okt()
+    # sent_clean = okt.normalize(sent)
+    # clean_words = []
+    # for word in okt.pos(sent_clean, stem=True):
+    #     if word[1] in ['Noun', 'Verb', 'Adjective']:
+    #         clean_words.append(word[0])
+    # sent_clean = ' '.join(clean_words)
+    # sent_clean = re.sub("[^가-힣ㄱ-ㅎㅏ-ㅣ\\s]", " ", sent_clean)
     
-    sent_clean = re.sub("[^가-힣ㄱ-ㅎㅏ-ㅣ\\s]", " ", sent_clean)
+    sent_clean = re.sub("[^가-힣ㄱ-ㅎㅏ-ㅣ\\s]", " ", sent)
     return sent_clean
 
 train["cleaned_title"] = train["title"].apply(lambda x : clean_text(x))

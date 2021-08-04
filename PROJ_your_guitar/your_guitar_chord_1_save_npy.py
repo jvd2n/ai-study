@@ -7,14 +7,14 @@ start_time = time.time()
 
 train_idg = ImageDataGenerator(
     rescale=1./255,
-    horizontal_flip=True,
-    vertical_flip=True,
-    width_shift_range=0.1,
-    height_shift_range=0.1,
-    rotation_range=5,
-    zoom_range=1.2,
-    shear_range=0.7,
-    fill_mode='nearest',
+    horizontal_flip=False,
+    vertical_flip=False,
+    # width_shift_range=0.1,
+    # height_shift_range=0.1,
+    # rotation_range=5,
+    # zoom_range=1.2,
+    # shear_range=0.7,
+    fill_mode='constant',
     validation_split=0.2
 )
 
@@ -24,8 +24,8 @@ test_idg = ImageDataGenerator(
 
 train_gen = train_idg.flow_from_directory(
     '../data/guitar_chord',
-    target_size=(150, 150),
-    batch_size=11000,
+    target_size=(130, 130),
+    batch_size=6000,
     class_mode='categorical',
     subset='training',
 )
@@ -33,8 +33,8 @@ train_gen = train_idg.flow_from_directory(
 
 valid_gen = train_idg.flow_from_directory(
     '../data/guitar_chord',
-    target_size=(150, 150),
-    batch_size=2700,
+    target_size=(130, 130),
+    batch_size=1500,
     class_mode='categorical',
     subset='validation',
 )
@@ -42,8 +42,8 @@ valid_gen = train_idg.flow_from_directory(
 
 test_gen = test_idg.flow_from_directory(
     '../data/guitar_chord_pred',
-    batch_size=14,
-    target_size=(150, 150),
+    batch_size=20,
+    target_size=(130, 130),
     class_mode='categorical',
     shuffle=False,
 )
@@ -58,6 +58,7 @@ ic(test_gen[0][1].shape)   # (14, 14)
 
 # ic(train_gen.shape)
 # ic(valid_gen.shape)
+
 '''
 augment_size = 50000 - train_gen[0][0].shape[0]
 
@@ -99,5 +100,14 @@ np.save('./_save/_npy/ygc_test_x.npy', arr=test_gen[0][0])
 np.save('./_save/_npy/ygc_test_y.npy', arr=test_gen[0][1])
 
 duration_time = time.time() - start_time
-
 ic(duration_time)
+
+import matplotlib.pyplot as plt
+# plt.imshow(x_train[0][1], cmap='gray')
+# plt.show()
+plt.figure(figsize=(30, 3))
+for i in range(30):
+    plt.subplot(3, 10, i+1)
+    plt.axis('off')
+    plt.imshow(train_gen[0][0][i])
+plt.show()

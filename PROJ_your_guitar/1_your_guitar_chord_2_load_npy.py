@@ -22,6 +22,10 @@ ic(y_valid.shape)    # (2681, 14)
 ic(x_test.shape)     # (14, 150, 150, 3)
 ic(y_test.shape)     # (14, 14)
 
+second_shape = x_train.shape[1]
+third_shape = x_train.shape[2]
+fourth_shape = x_train.shape[3]
+
 ic(y_train[:10])
 
 # ic(x_train[1])
@@ -29,8 +33,8 @@ ic(y_train[:10])
 # ic(y_train[1])
 # ic(y_test[1])
 
-x_train = x_train.reshape(-1, x_train.shape[1] * x_train.shape[2] * x_train.shape[3])
-x_valid = x_valid.reshape(-1, x_valid.shape[1] * x_valid.shape[2] * x_valid.shape[3])
+x_train = x_train.reshape(-1, second_shape * third_shape * fourth_shape)
+x_valid = x_valid.reshape(-1, second_shape * third_shape * fourth_shape)
 
 from sklearn.preprocessing import RobustScaler
 scaler = RobustScaler()
@@ -39,8 +43,8 @@ x_valid = scaler.transform(x_valid)
 ic(x_train)
 ic(x_valid)
 
-x_train = x_train.reshape(-1, 130, 130, 3)
-x_valid = x_valid.reshape(-1, 130, 130, 3)
+x_train = x_train.reshape(-1, second_shape, third_shape, fourth_shape)
+x_valid = x_valid.reshape(-1, second_shape, third_shape, fourth_shape)
 
 # import tensorflow as tf
 from tensorflow.keras.models import Sequential
@@ -48,11 +52,18 @@ from tensorflow.keras.applications import VGG16
 from tensorflow.keras.layers import InputLayer, Conv2D, MaxPooling2D, Dropout, Flatten, Dense, GlobalAveragePooling2D
 
 model = Sequential()
-model.add(InputLayer(input_shape=(130, 130, 3)))
-model.add(Conv2D(16, (3, 3), (1, 1), 'same', activation='relu'))
+model.add(InputLayer(
+    input_shape=(
+        second_shape, 
+        third_shape, 
+        fourth_shape)
+    ))
+model.add(Conv2D(16, (3, 3), (1, 1), 'same', 
+                activation='relu'))
 model.add(MaxPooling2D((2, 2)))
 model.add(Dropout(0.3))
-model.add(Conv2D(32, (3, 3), (1, 1), 'same', activation='relu'))
+model.add(Conv2D(32, (3, 3), (1, 1), 'same', 
+                activation='relu'))
 model.add(MaxPooling2D((2, 2)))
 model.add(Dropout(0.3))
 model.add(Flatten())
@@ -60,6 +71,7 @@ model.add(Flatten())
 model.add(Dense(128, activation='relu'))
 model.add(Dense(64, activation='relu'))
 model.add(Dense(32, activation='relu'))
+# model.add(Dense(14, activation='softmax'))
 model.add(Dense(7, activation='softmax'))
 
 
@@ -154,6 +166,7 @@ mcp = ModelCheckpoint(
 model.save(filepath + 'YGC_MCP.h5')
 
 start_time = time.time()
+
 hist = model.fit(
     x_train, y_train,
     epochs=30,
@@ -164,14 +177,15 @@ hist = model.fit(
     validation_steps=8,
     callbacks=[es, mcp],
 )
-end_time = time.time() - start_time
+
+duration_time = time.time() - start_time
 
 acc = hist.history['acc']
 val_acc = hist.history['val_acc']
 loss = hist.history['loss']
 val_loss = hist.history['val_loss']
 
-ic(end_time)
+ic(duration_time)
 ic(acc[-1])
 ic(val_acc[-1])
 ic(loss[-1])
@@ -181,11 +195,7 @@ y_pred = model.predict(x_test)
 ic(y_pred)
 ic(y_test)
 y_pred = model.predict(x_test)
-# ic(np.argmax(y_pred, axis=1))
-# ic(np.argmax(y_pred, axis=1).shape)
-# ic(np.argmax(y_test, axis=1).shape)
 
-# print(f'Correct_Answer_Score: {(np.count_nonzero(results == True) / results.size) * 100}')
 results = []
 for i, j in enumerate(y_pred):
     results.append(np.argmax(y_pred[i]) == np.argmax(y_test[i]))
@@ -233,18 +243,6 @@ plt.legend(['train_loss', 'val_loss'])
 
 plt.show()
 
-'''
-ic| acc[-1]: 0.8217522501945496
-ic| val_acc[-1]: 0.6096823215484619
-ic| loss[-1]: 0.37846890091896057
-ic| val_loss[-1]: 0.8057641386985779
-ic| y_pred: array([[0.5404332 ],
-                   [0.47137678],
-                   [0.04922736]], dtype=float32)
-1. Classified/ WOMEN with 54.0%
-2. Classified/ MEN with 52.9%
-3. Classified/ MEN with 95.1%
-'''
 '''
 pred_x = []
 from tensorflow.keras.preprocessing import image

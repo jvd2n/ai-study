@@ -5,55 +5,55 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 start_time = time.time()
 
-train_idg = ImageDataGenerator(
-    rescale=1./255,
-    horizontal_flip=False,
-    vertical_flip=False,
-    fill_mode='constant',
-    validation_split=0.2,
-    # width_shift_range=0.1,
-    # height_shift_range=0.1,
-    # rotation_range=5,
-    # zoom_range=1.2,
-    # shear_range=0.7,
-)
-
 # train_idg = ImageDataGenerator(
 #     rescale=1./255,
-#     horizontal_flip=True,
-#     vertical_flip=True,
+#     horizontal_flip=False,
+#     vertical_flip=False,
 #     fill_mode='constant',
 #     validation_split=0.2,
-#     width_shift_range=0.1,
-#     height_shift_range=0.1,
-#     rotation_range=5,
-#     zoom_range=1.2,
-#     shear_range=0.7,
+#     # width_shift_range=0.1,
+#     # height_shift_range=0.1,
+#     # rotation_range=5,
+#     # zoom_range=1.2,
+#     # shear_range=0.7,
 # )
+
+train_idg = ImageDataGenerator(
+    rescale=1./255,
+    horizontal_flip=True,
+    vertical_flip=True,
+    fill_mode='nearest',
+    validation_split=0.2,
+    width_shift_range=0.1,
+    height_shift_range=0.1,
+    rotation_range=5,
+    zoom_range=1.2,
+    shear_range=0.7,
+)
 
 test_idg = ImageDataGenerator(
     rescale=1./255,
 )
 
 train_gen = train_idg.flow_from_directory(
-    '../data/guitar_chord',
-    target_size=(130, 130),
-    batch_size=6000,
+    '../data/guitar_chord_label_14',
+    target_size=(120, 120),
+    batch_size=11000,
     class_mode='categorical',
     subset='training',
 )
 
 valid_gen = train_idg.flow_from_directory(
-    '../data/guitar_chord',
-    target_size=(130, 130),
-    batch_size=1500,
+    '../data/guitar_chord_label_14',
+    target_size=(120, 120),
+    batch_size=3000,
     class_mode='categorical',
     subset='validation',
 )
 
 test_gen = test_idg.flow_from_directory(
-    '../data/guitar_chord_pred',
-    batch_size=20,
+    '../data/guitar_chord_pred_label_14',
+    batch_size=22,
     target_size=(130, 130),
     class_mode='categorical',
     shuffle=False,
@@ -98,14 +98,14 @@ y_train = np.concatenate((train_gen[0][1], y_augmented))
 ic(x_train.shape, y_train.shape)    # (100000, 28, 28, 1), (100000,)
 '''
 
-np.save('./_save/_npy/ygc_train_x.npy', arr=train_gen[0][0])
+np.save('./_save/_npy/ygc___train_x.npy', arr=train_gen[0][0])
 # np.save('./_save/_npy/ygc_train_x.npy', arr=x_train)
-np.save('./_save/_npy/ygc_train_y.npy', arr=train_gen[0][1])
+np.save('./_save/_npy/ygc___train_y.npy', arr=train_gen[0][1])
 # np.save('./_save/_npy/ygc_train_y.npy', arr=y_train)
-np.save('./_save/_npy/ygc_valid_x.npy', arr=valid_gen[0][0])
-np.save('./_save/_npy/ygc_valid_y.npy', arr=valid_gen[0][1])
-np.save('./_save/_npy/ygc_test_x.npy', arr=test_gen[0][0])
-np.save('./_save/_npy/ygc_test_y.npy', arr=test_gen[0][1])
+np.save('./_save/_npy/ygc___valid_x.npy', arr=valid_gen[0][0])
+np.save('./_save/_npy/ygc___valid_y.npy', arr=valid_gen[0][1])
+np.save('./_save/_npy/ygc___test_x.npy', arr=test_gen[0][0])
+np.save('./_save/_npy/ygc___test_y.npy', arr=test_gen[0][1])
 
 duration_time = time.time() - start_time
 ic(duration_time)
@@ -113,7 +113,7 @@ ic(duration_time)
 import matplotlib.pyplot as plt
 # plt.imshow(x_train[0][1], cmap='gray')
 # plt.show()
-plt.figure(figsize=(30, 3))
+plt.figure(figsize=(26, 3))
 for i in range(30):
     plt.subplot(3, 10, i+1)
     plt.axis('off')

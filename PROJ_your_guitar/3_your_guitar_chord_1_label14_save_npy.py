@@ -56,9 +56,6 @@ ic(valid_gen[0][1].shape)   # (2681, 14)
 ic(test_gen[0][0].shape)   # (14, 150, 150, 3)
 ic(test_gen[0][1].shape)   # (14, 14)
 
-# ic(train_gen.shape)
-# ic(valid_gen.shape)
-
 augment_size = 15000 - train_gen[0][0].shape[0]
 
 randidx = np.random.randint(train_gen[0][0].shape[0], size=augment_size)

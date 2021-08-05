@@ -1,12 +1,12 @@
 import time
 import numpy as np
 from icecream import ic
-x_train = np.load('./_save/_npy/ygc_14_aug_train_x.npy')
-y_train = np.load('./_save/_npy/ygc_14_aug_train_y.npy')
-x_valid = np.load('./_save/_npy/ygc_14_aug_valid_x.npy')
-y_valid = np.load('./_save/_npy/ygc_14_aug_valid_y.npy')
-x_test = np.load('./_save/_npy/ygc_14_aug_test_x.npy')
-y_test = np.load('./_save/_npy/ygc_14_aug_test_y.npy')
+x_train = np.load('./_save/_npy/ygc_aug_train_x.npy')
+y_train = np.load('./_save/_npy/ygc_aug_train_y.npy')
+x_valid = np.load('./_save/_npy/ygc_aug_valid_x.npy')
+y_valid = np.load('./_save/_npy/ygc_aug_valid_y.npy')
+x_test = np.load('./_save/_npy/ygc_aug_test_x.npy')
+y_test = np.load('./_save/_npy/ygc_aug_test_y.npy')
 
 ic(x_train.shape)    # (10762, 150, 150, 3)
 ic(y_train.shape)    # (10762, 14)
@@ -32,47 +32,54 @@ x_valid = scaler.transform(x_valid)
 ic(x_train)
 ic(x_valid)
 
-x_train = x_train.reshape(-1, 100, 100, 3)
-x_valid = x_valid.reshape(-1, 100, 100, 3)
+x_train = x_train.reshape(-1, 75, 75, 3)
+x_valid = x_valid.reshape(-1, 75, 75, 3)
 
 # import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.applications import VGG16
 from tensorflow.keras.layers import InputLayer, Conv2D, MaxPooling2D, Dropout, Flatten, Dense, GlobalAveragePooling2D
 
-model = Sequential()
-model.add(InputLayer(input_shape=(100, 100, 3)))
-model.add(Conv2D(16, (3, 3), (1, 1), 'same', activation='relu'))
-model.add(MaxPooling2D((2, 2)))
-model.add(Dropout(0.3))
-model.add(Conv2D(32, (3, 3), (1, 1), 'same', activation='relu'))
-model.add(MaxPooling2D((2, 2)))
-model.add(Dropout(0.3))
-model.add(Flatten())
-# model.add(Dense(256, activation='relu'))
-model.add(Dense(128, activation='relu'))
-model.add(Dense(64, activation='relu'))
-model.add(Dense(32, activation='relu'))
-model.add(Dense(14, activation='softmax'))
+# model = Sequential()
+# model.add(InputLayer(input_shape=(130, 130, 3)))
+# model.add(Conv2D(16, (3, 3), (1, 1), 'same', activation='relu'))
+# model.add(MaxPooling2D((2, 2)))
+# model.add(Dropout(0.3))
+# model.add(Conv2D(32, (3, 3), (1, 1), 'same', activation='relu'))
+# model.add(MaxPooling2D((2, 2)))
+# model.add(Dropout(0.3))
+# model.add(Flatten())
+# # model.add(Dense(256, activation='relu'))
+# model.add(Dense(128, activation='relu'))
+# model.add(Dense(64, activation='relu'))
+# model.add(Dense(32, activation='relu'))
+# model.add(Dense(7, activation='softmax'))
 
 
+VGG16_MODEL = VGG16(
+    input_shape = (75, 75, 3),
+    include_top = False,
+    weights = 'imagenet',
+)
+VGG16_MODEL.trainable = False
+model = Sequential([
+    VGG16_MODEL,
+    GlobalAveragePooling2D(),
+    Dense(7, activation ='softmax'),
+])
 # VGG16_MODEL = VGG16(
-#     input_shape = (150, 150, 3),
+#     input_shape = (75, 75, 3),
 #     include_top = False,
 #     weights = 'imagenet',
 # )
 # VGG16_MODEL.trainable = False
-# # flatten이 없음 ( globalaveragepooling으로 대체 )
-# #  ==> 가중치가 필요없음
 # global_average_layer = GlobalAveragePooling2D()
-# # FFNN의 가중치는 학습됨
 # prediction_layer = Dense(7, activation ='softmax')
 # model = Sequential([
 #     VGG16_MODEL,
 #     global_average_layer,
 #     prediction_layer
 # ])
-
 
 '''
 from tensorflow.keras.applications import EfficientNetB0

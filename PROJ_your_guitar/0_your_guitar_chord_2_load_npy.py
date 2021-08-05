@@ -1,12 +1,19 @@
+# np.save('./_save/_npy/ygc_train_x.npy', arr=train_gen[0][0])
+# np.save('./_save/_npy/ygc_train_y.npy', arr=train_gen[0][1])
+# np.save('./_save/_npy/ygc_valid_x.npy', arr=valid_gen[0][0])
+# np.save('./_save/_npy/ygc_valid_y.npy', arr=valid_gen[0][1])
+# np.save('./_save/_npy/ygc_test_x.npy', arr=test_gen[0][0])
+# np.save('./_save/_npy/ygc_test_y.npy', arr=test_gen[0][1])
+
 import time
 import numpy as np
 from icecream import ic
-x_train = np.load('./_save/_npy/ygc_aug_train_x.npy')
-y_train = np.load('./_save/_npy/ygc_aug_train_y.npy')
-x_valid = np.load('./_save/_npy/ygc_aug_valid_x.npy')
-y_valid = np.load('./_save/_npy/ygc_aug_valid_y.npy')
-x_test = np.load('./_save/_npy/ygc_aug_test_x.npy')
-y_test = np.load('./_save/_npy/ygc_aug_test_y.npy')
+x_train = np.load('./_save/_npy/ygc___train_x.npy')
+y_train = np.load('./_save/_npy/ygc___train_y.npy')
+x_valid = np.load('./_save/_npy/ygc___valid_x.npy')
+y_valid = np.load('./_save/_npy/ygc___valid_y.npy')
+x_test = np.load('./_save/_npy/ygc___test_x.npy')
+y_test = np.load('./_save/_npy/ygc___test_y.npy')
 
 ic(x_train.shape)    # (10762, 150, 150, 3)
 ic(y_train.shape)    # (10762, 14)
@@ -53,7 +60,7 @@ model.add(Flatten())
 model.add(Dense(128, activation='relu'))
 model.add(Dense(64, activation='relu'))
 model.add(Dense(32, activation='relu'))
-model.add(Dense(7, activation='softmax'))
+model.add(Dense(14, activation='softmax'))
 
 
 # VGG16_MODEL = VGG16(
@@ -147,6 +154,7 @@ mcp = ModelCheckpoint(
 model.save(filepath + 'YGC_MCP.h5')
 
 start_time = time.time()
+
 hist = model.fit(
     x_train, y_train,
     epochs=30,
@@ -157,14 +165,15 @@ hist = model.fit(
     validation_steps=8,
     callbacks=[es, mcp],
 )
-end_time = time.time() - start_time
+
+duration_time = time.time() - start_time
 
 acc = hist.history['acc']
 val_acc = hist.history['val_acc']
 loss = hist.history['loss']
 val_loss = hist.history['val_loss']
 
-ic(end_time)
+ic(duration_time)
 ic(acc[-1])
 ic(val_acc[-1])
 ic(loss[-1])
@@ -226,18 +235,6 @@ plt.legend(['train_loss', 'val_loss'])
 
 plt.show()
 
-'''
-ic| acc[-1]: 0.8217522501945496
-ic| val_acc[-1]: 0.6096823215484619
-ic| loss[-1]: 0.37846890091896057
-ic| val_loss[-1]: 0.8057641386985779
-ic| y_pred: array([[0.5404332 ],
-                   [0.47137678],
-                   [0.04922736]], dtype=float32)
-1. Classified/ WOMEN with 54.0%
-2. Classified/ MEN with 52.9%
-3. Classified/ MEN with 95.1%
-'''
 '''
 pred_x = []
 from tensorflow.keras.preprocessing import image

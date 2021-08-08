@@ -67,6 +67,8 @@ model = Sequential([
     GlobalAveragePooling2D(),
     Dense(7, activation ='softmax'),
 ])
+
+
 # VGG16_MODEL = VGG16(
 #     input_shape = (75, 75, 3),
 #     include_top = False,

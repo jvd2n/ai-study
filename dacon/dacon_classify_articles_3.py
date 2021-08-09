@@ -81,15 +81,31 @@ model.compile(
     metrics=['acc']
 )
 
+from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau
+es = EarlyStopping(
+    monitor='val_loss', 
+    patience=10, 
+    verbose=1, 
+    mode='min'
+)
+reduce_lr = ReduceLROnPlateau(
+    monitor='val_loss', 
+    patience=5, 
+    verbose=1, 
+    mode='auto',
+    factor=0.5
+)
+
 import time
 start_time = time.time()
 model.fit(
     train_tf_text[:40000],
     train_label[:40000],
     verbose=1,
-    epochs=10,
+    epochs=50,
     batch_size=64,
-    validation_data=(train_tf_text[40000:], train_label[40000:])
+    validation_data=(train_tf_text[40000:], train_label[40000:]),
+    callbacks=[es, reduce_lr]
 )
 # model.fit(train_tf_text, train_label, epochs=5, batch_size=128, validation_split=0.2)
 duration_time = time.time() - start_time

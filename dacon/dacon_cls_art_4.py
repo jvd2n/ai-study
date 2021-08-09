@@ -28,7 +28,7 @@ MAX_LEN = 44
 DATA_IN_PATH = './dacon/_data/'
 DATA_OUT_PATH = './dacon/_output/'
 PATH = './dacon/_data/'
-tokenizer = BertTokenizer.from_pretrained('bert-base-multilingual-cased', cache_dir='bert_ckpt', do_lower_case=False)
+tokenizer = BertTokenizer.from_pretrained('bert-base-multilingual-cased', cache_dir='./dacon/bert_ckpt', do_lower_case=False)
 
 train_data = pd.read_csv(PATH + 'train_data.csv')
 test_data = pd.read_csv(PATH + 'test_data.csv')

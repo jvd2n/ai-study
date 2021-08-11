@@ -2,10 +2,10 @@
 from sklearn.utils import all_estimators
 from sklearn.metrics import accuracy_score
 
-from icecream import ic
-import numpy as np
-from sklearn.datasets import load_iris
 import warnings
+import numpy as np
+from icecream import ic
+from sklearn.datasets import load_iris
 
 warnings.filterwarnings('ignore')
 
@@ -44,10 +44,10 @@ for i, (name, algorithm) in enumerate(allAlgorithms):
         model.fit(x_train, y_train)
         y_pred = model.predict(x_test)
         acc = accuracy_score(y_test, y_pred)
-        print('[', i ,'] ', name, '의 정답률 : ', acc)
+        print('[', i+1 ,'] ', name, '의 정답률 : ', acc)
     except:
         # continue
-        print('[', i ,'] ', name, '은 예외 처리 되었습니다.')
+        print('[', i+1 ,'] ', name, '은 예외 처리 되었습니다.')
 
 '''
 from sklearn.svm import LinearSVC, SVC

@@ -55,5 +55,5 @@ print('Elapsed_Time : ', str(datetime.timedelta(seconds=math.ceil(time.time()-st
 ic| x.shape: (150, 4), y.shape: (150,)
 model.score :  0.9111111111111111
 accuracy_score :  0.9111111111111111
-Elapsed_Time :  0:00:00
+Elapsed_Time :  0:00:01
 '''

@@ -23,7 +23,7 @@ print(f'train.shape:{train.shape}')
 print(f'test.shape:{test.shape}')
 print(f'train label 개수: {train.label.nunique()}')
 
-os.environ["CUDA_VISIBLE_DEVICES"]="0"
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
 train = train[['과제명', '요약문_연구내용','label']]
 test = test[['과제명', '요약문_연구내용']]
@@ -37,20 +37,19 @@ print(test.shape)
 
 tf.random.set_seed(1234)
 np.random.seed(1234)
-BATCH_SIZE = 32
+BATCH_SIZE = 128
 NUM_EPOCHS = 3
 VALID_SPLIT = 0.2
 MAX_LEN = 200
 
-tokenizer = BertTokenizer.from_pretrained('bert-base-multilingual-cased',  cache_dir='bert_ckpt', do_lower_case=False)
+tokenizer = BertTokenizer.from_pretrained('bert-base-multilingual-cased', cache_dir='bert_ckpt', do_lower_case=False)
 
 def bert_tokenizer(sent, MAX_LEN):
-    
     encoded_dict = tokenizer.encode_plus(
-        text=sent, 
+        text=sent,
         add_special_tokens=True, 
         max_length=MAX_LEN, 
-        padding=True, 
+        pad_to_max_length=True, 
         return_attention_mask=True,
         truncation=True
     )
@@ -73,11 +72,9 @@ def clean_text(sent):
 for train_sent, train_label in zip(train['data'], train['label']):
     try:
         input_id, attention_mask, token_type_id = bert_tokenizer(clean_text(train_sent), MAX_LEN=MAX_LEN)
-        
         input_ids.append(input_id)
         attention_masks.append(attention_mask)
         token_type_ids.append(token_type_id)
-        #########################################
         train_data_labels.append(train_label)
         
     except Exception as e:
@@ -88,7 +85,6 @@ for train_sent, train_label in zip(train['data'], train['label']):
 train_input_ids = np.array(input_ids, dtype=int)
 train_attention_masks = np.array(attention_masks, dtype=int)
 train_token_type_ids = np.array(token_type_ids, dtype=int)
-###########################################################
 train_inputs = (train_input_ids, train_attention_masks, train_token_type_ids)
 train_labels = np.asarray(train_data_labels, dtype=np.int32)
 
@@ -114,7 +110,6 @@ class TFBertClassifier(tf.keras.Model):
         pooled_output = outputs[1] 
         pooled_output = self.dropout(pooled_output, training=training)
         logits = self.classifier(pooled_output)
-
         return logits
 
 cls_model = TFBertClassifier(
@@ -136,7 +131,7 @@ es = EarlyStopping(monitor='val_acc', min_delta=0.0001, patience=5, verbose=1)
 # min_delta: the threshold that triggers the termination (acc should at least improve 0.0001)
 # patience: no improvment epochs (patience = 1, 1번 이상 상승이 없으면 종료)\
 
-checkpoint_path = os.path.join(OUTPUT_PATH, model_name, 'weights.h5')
+checkpoint_path = os.path.join(OUTPUT_PATH, model_name, 'climate_weights.h5')
 checkpoint_dir = os.path.dirname(checkpoint_path)
 
 # Create path if exists
@@ -154,17 +149,18 @@ cp = ModelCheckpoint(
     save_weights_only=True
 )
 
-# 학습과 eval 시작
+# train
 history = cls_model.fit(
     train_inputs, train_labels, 
-    epochs=30, batch_size=32,
-    validation_split = VALID_SPLIT, 
-    callbacks=[es, cp]
+    epochs=NUM_EPOCHS,
+    batch_size=BATCH_SIZE,
+    validation_split=VALID_SPLIT,
+    # callbacks=[es, cp]
 )
 
-input_ids =[]
-attention_masks =[]
-token_type_ids =[]
+input_ids = []
+attention_masks = []
+token_type_ids = []
 train_data_labels = []
 
 def clean_text(sent):
@@ -174,7 +170,6 @@ def clean_text(sent):
 for test_sent in test['data']:
     try:
         input_id, attention_mask, token_type_id = bert_tokenizer(clean_text(test_sent), MAX_LEN=40)
-        
         input_ids.append(input_id)
         attention_masks.append(attention_mask)
         token_type_ids.append(token_type_id)
@@ -197,4 +192,5 @@ sample_submission['label'] = results
 print(sample_submission)
 
 date_time = datetime.datetime.now().strftime("%y%m%d_%H%M")
-sample_submission.to_csv(OUTPUT_PATH + 'bert_model_' + date_time + '.csv', index=False)
+sample_submission.to_csv(OUTPUT_PATH + 'dc_cli_1_' + date_time + '.csv', index=False)
+print(date_time)

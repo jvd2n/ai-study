@@ -45,6 +45,7 @@ for model in models:
     scores = cross_val_score(model, x, y, cv=kfold)
     print(model, '// Acc : ', scores, ' /  AVG(Acc) : ', round(np.mean(scores),4))   # fit ~ score
 
+
 '''
 KNeighborsRegressor() // Acc :  [0.39683913 0.32569788 0.43311217 0.32635899 0.35466969]  /  AVG(Acc) :  0.3673
 DecisionTreeRegressor() // Acc :  [-0.23853387 -0.1738592  -0.17189106  0.01748475  0.0067619 ]  /  AVG(Acc) :  -0.112

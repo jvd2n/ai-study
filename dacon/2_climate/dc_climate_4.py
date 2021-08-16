@@ -406,7 +406,6 @@ with open('inputs.pkl', 'rb') as f:
     train_inputs, test_inputs, labels = pickle.load(f)
 
 # from PIL import Image
-
 # # input_shape0 = train_inputs[0].shape[1]
 # # input_shape1 = train_inputs[1].shape[1]
 # # input_shape2 = train_inputs[2].shape[1]

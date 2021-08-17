@@ -33,8 +33,8 @@ warnings.filterwarnings('ignore')
 
 matplotlib.rcParams['axes.unicode_minus'] = False
 matplotlib.rc('font', family='Malgun Gothic')
-plt.rc('font', family=fm.FontProperties(
-    fname="/usr/share/fonts/truetype/nanum/NanumBarunGothic.ttf").get_name())  # for Windows OS user
+# plt.rc('font', family=fm.FontProperties(
+#     fname="/usr/share/fonts/truetype/nanum/NanumBarunGothic.ttf").get_name())  # for Windows OS user
 # %matplotlib inline
 
 
@@ -94,12 +94,12 @@ def visualize_train_length(train, target_columns):
     for i, column in enumerate(target_columns):
         text_len = [len(s.split()) for s in train[column]]
 
-        display('='*50)
-        display(f'{column} 최소 길이 : {np.min(text_len)}')
-        display(f'{column} 25% 길이 : {np.quantile(text_len,0.25)}')
-        display(f'{column} 최대 길이 : {np.max(text_len)}')
-        display(f'{column} 75% 길이 : {np.quantile(text_len,0.75)}')
-        display(f'{column} 평균 길이 : {np.mean(text_len)}')
+        print('='*50)
+        print(f'{column} 최소 길이 : {np.min(text_len)}')
+        print(f'{column} 25% 길이 : {np.quantile(text_len,0.25)}')
+        print(f'{column} 최대 길이 : {np.max(text_len)}')
+        print(f'{column} 75% 길이 : {np.quantile(text_len,0.75)}')
+        print(f'{column} 평균 길이 : {np.mean(text_len)}')
 
         plt.subplot(2, 3, i+1)
         plt.boxplot(text_len)
@@ -117,7 +117,7 @@ def visualize_train_length(train, target_columns):
 
 def sampling_data(train, target_columns):
     pj_name_len = 18
-    summ_goal_len = 210
+    summ_goal_len = 150
     summ_key_len = 18
 
     max_lens = [pj_name_len, summ_goal_len, summ_key_len]
@@ -125,8 +125,8 @@ def sampling_data(train, target_columns):
     for column, max_len in zip(target_columns, max_lens):
         temp = train[column].apply(lambda x: len(x.split()) < max_len)
         explained_ratio = temp.values.sum() / train.shape[0]
-        display(column)
-        display(
+        print(column)
+        print(
             f'전체 샘플 중 길이가 {max_len}이하인 샘플의 비율 : {round(explained_ratio * 100,2)}%')
 
         total_index -= set(train[temp == False].index)
@@ -175,13 +175,13 @@ def get_topk_nums(train, target_columns):
                 rare_cnt = rare_cnt + 1
                 rare_freq = rare_freq + value
 
-        display(f'단어 집합(vocabulary)의 크기 : {total_cnt}')
-        display(f'등장 빈도가 {threshold - 1}번 이하인 희귀 단어의 수 : {rare_cnt}')
-        display(
+        print(f'단어 집합(vocabulary)의 크기 : {total_cnt}')
+        print(f'등장 빈도가 {threshold - 1}번 이하인 희귀 단어의 수 : {rare_cnt}')
+        print(
             f'단어 집합에서 희귀 단어를 제외시킬 경우의 단어 집합의 크기 : {(total_cnt - rare_cnt)}')
-        display(f'단어 집합에서 희귀 단어의 비율: {(rare_cnt / total_cnt)*100}')
-        display(f'전체 등장 빈도에서 희귀 단어 등장 빈도 비율: {(rare_freq / total_freq)*100}')
-        display('='*50)
+        print(f'단어 집합에서 희귀 단어의 비율: {(rare_cnt / total_cnt)*100}')
+        print(f'전체 등장 빈도에서 희귀 단어 등장 빈도 비율: {(rare_freq / total_freq)*100}')
+        print('='*50)
 
         top_ks.append(total_cnt - rare_cnt)
     return top_ks
@@ -204,7 +204,7 @@ def ngram_vectorize(train_data, label, test_data, top_k):
     x_train = vectorizer.fit_transform(train_data)
     x_test = vectorizer.transform(test_data)
 
-    selector = SelectKBest(f_classif, k=min(80000, top_k))
+    selector = SelectKBest(f_classif, k=min(12000, top_k))
     selector.fit(x_train, label.values)
     x_train = selector.transform(x_train).astype('float32')
     x_test = selector.transform(x_test).astype('float32')
@@ -227,7 +227,7 @@ def vectorize_data(train, test, top_ks, target_columns):
 def data_loading_and_setting_main():
 
     # kwargs
-    path = '../data'
+    path = './dacon/_data/2_climate'
     target_columns = ['과제명', '요약문_연구목표', '요약문_한글키워드']
 
     ########################################################################
@@ -244,11 +244,11 @@ def data_loading_and_setting_main():
     train_texts = drop_short_texts(train_texts, target_columns)
 
     ########################################################################
-    visualize_train_length(train_texts, target_columns)
+#    visualize_train_length(train_texts, target_columns)
 
     ########################################################################
     train_texts = sampling_data(train_texts, target_columns)
-    visualize_train_length(train_texts, target_columns)
+#    visualize_train_length(train_texts, target_columns)
 
     ########################################################################
     train_texts = oversampling_minor_classes(train_texts, target_columns)
@@ -260,7 +260,7 @@ def data_loading_and_setting_main():
     train_inputs, test_inputs = vectorize_data(
         train_texts, test_texts, top_ks, target_columns)
 
-    display('=========================================== !!!PREPARING DATA DONE!!! ===========================================')
+    print('=========================================== !!!PREPARING DATA DONE!!! ===========================================')
     return train_inputs, test_inputs, train_texts['label']
 
 
@@ -341,7 +341,8 @@ def create_model(input_shape0, input_shape1, input_shape2, num_labels, learning_
     model = Model([x_in0, x_in1, x_in2], x_out)
     optimizer = Adam(lr=learning_rate)
     model.compile(optimizer=optimizer,
-                  loss='sparse_categorical_crossentropy', metrics=['acc'])
+                  loss='sparse_categorical_crossentropy', 
+                  metrics=['acc'])
 
     return model
 
@@ -355,10 +356,8 @@ seed = np.random.randint(2**16-1)
 skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=seed)
 
 for train_idx, valid_idx in skf.split(train_inputs[0], labels):
-    X_train_input0, X_train_input1, X_train_input2, X_train_label = get_input_dataset(
-        train_inputs, train_idx, train=True)
-    X_valid_input0, X_valid_input1, X_valid_input2, X_valid_label = get_input_dataset(
-        train_inputs, valid_idx, train=True)
+    X_train_input0, X_train_input1, X_train_input2, X_train_label = get_input_dataset(train_inputs, train_idx, train=True)
+    X_valid_input0, X_valid_input1, X_valid_input2, X_valid_label = get_input_dataset(train_inputs, valid_idx, train=True)
 
     now = datetime.now()
     now = str(now)[11:16].replace(':', 'h')+'m'
@@ -380,12 +379,12 @@ for train_idx, valid_idx in skf.split(train_inputs[0], labels):
     model.fit(
         [X_train_input0, X_train_input1, X_train_input2],
         X_train_label,
-        epochs=1000,
+        epochs=100,
         callbacks=callbacks,
         validation_data=([X_valid_input0, X_valid_input1,
                          X_valid_input2], X_valid_label),
         verbose=1,  # Logs once per epoch.
-        batch_size=4096)
+        batch_size=8182)
 
     model.load_weights(ckpt_path)
     prediction = model.predict(
@@ -398,9 +397,9 @@ for ar in glob('*.npy'):
     arr = np.load(ar)
     predictions.append(arr)
 
-sample = pd.read_csv('../data/sample_submission.csv')
+sample = pd.read_csv('./dacon/_data/2_climate/sample_submission.csv')
 sample['label'] = np.argmax(np.mean(predictions, axis=0), axis=1)
-sample.to_csv('./Day0810_JayHong.csv', index=False)
+sample.to_csv('./dacon/_output/2_climate/dc_cli_4_.csv', index=False)
 
 with open('inputs.pkl', 'rb') as f:
     train_inputs, test_inputs, labels = pickle.load(f)

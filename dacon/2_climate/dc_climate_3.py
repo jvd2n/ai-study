@@ -12,7 +12,7 @@ from konlpy.tag import Okt
 import sklearn
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import log_loss, accuracy_score, f1_score
+from sklearn.metrics import log_loss, accuracy_score,f1_score
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.ensemble import RandomForestClassifier
 
@@ -23,7 +23,7 @@ train = pd.read_csv(DATA_IN_PATH + 'train.csv')
 test = pd.read_csv(DATA_IN_PATH + 'test.csv')
 sample_submission = pd.read_csv(DATA_IN_PATH + 'sample_submission.csv')
 
-length = train['과제명'].astype(str).apply(len)
+length=train['과제명'].astype(str).apply(len)
 plt.hist(length, bins=50, alpha=0.5, color='r', label='word')
 plt.title('histogram of length of task_name')
 plt.figure(figsize=(12, 5))
@@ -33,7 +33,7 @@ print('과제명 길이 최솟값: {}'.format(np.min(length)))
 print('과제명 길이 평균값: {}'.format(np.mean(length)))
 print('과제명 길이 중간값: {}'.format(np.median(length)))
 
-length = train['요약문_연구목표'].astype(str).apply(len)
+length=train['요약문_연구목표'].astype(str).apply(len)
 plt.hist(length, bins=50, alpha=0.5, color='r', label='word')
 plt.title('histogram of length of summary_object')
 plt.figure(figsize=(12, 5))
@@ -43,7 +43,7 @@ print('요약문_연구목표 길이 최솟값: {}'.format(np.min(length)))
 print('요약문_연구목표 길이 평균값: {}'.format(np.mean(length)))
 print('요약문_연구목표 길이 중간값: {}'.format(np.median(length)))
 
-length = train['요약문_연구내용'].astype(str).apply(len)
+length=train['요약문_연구내용'].astype(str).apply(len)
 plt.hist(length, bins=50, alpha=0.5, color='r', label='word')
 plt.title('histogram of length of summary_content')
 plt.figure(figsize=(12, 5))
@@ -53,50 +53,49 @@ print('요약문_연구내용 길이 최솟값: {}'.format(np.min(length)))
 print('요약문_연구내용 길이 평균값: {}'.format(np.mean(length)))
 print('요약문_연구내용 길이 중간값: {}'.format(np.median(length)))
 
-train = train[['과제명', 'label']]
-test = test[['과제명']]
-
+train=train[['과제명','label']]
+test=test[['과제명']]
 
 def preprocessing(text, okt, remove_stopwords=False, stop_words=[]):
-    text = re.sub("[^가-힣ㄱ-ㅎㅏ-ㅣ]", "", text)
-    word_text = okt.morphs(text, stem=True)
+    text=re.sub("[^가-힣ㄱ-ㅎㅏ-ㅣ]","", text)
+    word_text=okt.morphs(text, stem=True)
     if remove_stopwords:
-        word_review = [token for token in word_text if not token in stop_words]
+        word_review=[token for token in word_text if not token in stop_words]
     return word_review
 
-
-stop_words = ['은', '는', '이', '가', '하', '아', '것',
-              '들', '의', '있', '되', '수', '보', '주', '등', '한']
-okt = Okt()
-clean_train_text = []
-clean_test_text = []
+stop_words=['은','는','이','가', '하','아','것','들','의','있','되','수','보','주','등','한']
+okt=Okt()
+clean_train_text=[]
+clean_test_text=[]
 
 for text in tqdm.tqdm(train['과제명']):
     try:
-        clean_train_text.append(preprocessing(
-            text, okt, remove_stopwords=True, stop_words=stop_words))
+        clean_train_text.append(preprocessing(text, okt, remove_stopwords=True, stop_words=stop_words))
     except:
         clean_train_text.append([])
-
+        
 for text in tqdm.tqdm(test['과제명']):
     if type(text) == str:
-        clean_test_text.append(preprocessing(
-            text, okt, remove_stopwords=True, stop_words=stop_words))
+        clean_test_text.append(preprocessing(text, okt, remove_stopwords=True, stop_words=stop_words))
     else:
         clean_test_text.append([])
 
 print(len(clean_train_text))
 print(len(clean_test_text))
 
-vectorizer = CountVectorizer(tokenizer=lambda x: x, lowercase=False)
-train_features = vectorizer.fit_transform(clean_train_text)
-test_features = vectorizer.transform(clean_test_text)
+vectorizer = CountVectorizer(tokenizer = lambda x: x, lowercase=False)
+train_features=vectorizer.fit_transform(clean_train_text)
+test_features=vectorizer.transform(clean_test_text)
 
-TEST_SIZE = 0.2
-RANDOM_SEED = 42
+TEST_SIZE=0.2
+RANDOM_SEED=42
+PARAMETERS = [
+    {'n_estimators': [100, 200, 300], 'learning_rate': [0.1, 0.3, 0.001, 0.01], 'max_depth': [4, 5, 6]},
+    {'n_estimators': [90, 100, 110], 'learning_rate': [0.1, 0.001, 0.01], 'max_depth': [4, 5, 6], 'colsample_bytree': [0.6, 0.9, 1]},
+    {'n_estimators': [90, 110], 'learning_rate': [0.1, 0.001, 0.5], 'max_depth': [4, 5, 6], 'colsample_bytree': [0.6, 0.9, 1], 'colsample_bylevel': [0.6, 0.7, 0.9]}
+]
 
-train_x, eval_x, train_y, eval_y = train_test_split(
-    train_features, train['label'], test_size=TEST_SIZE, random_state=RANDOM_SEED)
+train_x, eval_x, train_y, eval_y=train_test_split(train_features, train['label'], test_size=TEST_SIZE, random_state=RANDOM_SEED)
 
 model = RandomForestClassifier(n_estimators=100)
 
@@ -109,6 +108,5 @@ model.score(eval_x, eval_y)
 sample_submission['label'] = model.predict(test_features)
 
 date_time = datetime.datetime.now().strftime("%y%m%d_%H%M")
-sample_submission.to_csv(DATA_OUT_PATH + 'dc_cli_3_' +
-                         date_time + '.csv', index=False)
+sample_submission.to_csv(DATA_OUT_PATH + 'dc_cli_3_' + date_time + '.csv', index=False)
 print(date_time)

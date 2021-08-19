@@ -44,7 +44,7 @@ ic(y)
 ic(x.shape)
 from sklearn.model_selection import train_test_split
 x_train, x_test, y_train, y_test = train_test_split(x, y,
-                                                    train_size=0.997,
+                                                    train_size=0.8,
                                                     shuffle=True,
                                                     random_state=15)
 
@@ -83,7 +83,7 @@ from tensorflow.keras.callbacks import EarlyStopping
 # es = EarlyStopping(monitor='loss', patience=5, mode='min', verbose=1)
 es = EarlyStopping(monitor='val_loss', patience=30, mode='min', verbose=1)
 
-model.fit(x_train, y_train, epochs=500, batch_size=32, verbose=2, validation_split=0.00003, callbacks=[es])
+model.fit(x_train, y_train, epochs=500, batch_size=32, verbose=2, validation_split=0.15, callbacks=[es])
 
 # print(hist)
 # <tensorflow.python.keras.callbacks.History object at 0x000001EA87749CA0>

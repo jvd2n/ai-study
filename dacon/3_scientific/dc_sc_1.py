@@ -135,8 +135,10 @@ class CustomDataset(Dataset):
 train_dataset = CustomDataset(train_imgs, train_seqs, train_labels)
 val_dataset = CustomDataset(val_imgs, val_seqs, val_labels)
 
-train_dataloader = torch.utils.data.DataLoader(train_dataset, batch_size=BATCH_SIZE, num_workers=16, shuffle=True)
-val_dataloader = torch.utils.data.DataLoader(val_dataset, batch_size=BATCH_SIZE, num_workers=16, shuffle=True)
+train_dataloader = torch.utils.data.DataLoader(train_dataset, batch_size=BATCH_SIZE, num_workers=0, shuffle=True)
+val_dataloader = torch.utils.data.DataLoader(val_dataset, batch_size=BATCH_SIZE, num_workers=0, shuffle=True)
+# train_dataloader = torch.tensor(train_dataset.values).float()
+# val_dataloader = torch.tensor(val_dataset.values).float()
 
 sample_batch = next(iter(train_dataloader))
 

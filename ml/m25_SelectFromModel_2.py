@@ -19,7 +19,7 @@ x, y = load_diabetes(return_X_y=True)
 print(x.shape, y.shape) # (506, 13) (506,)
 
 x_train, x_test, y_train, y_test = train_test_split(
-    x, y, train_size=0.8, shuffle=True, random_state=66
+    x, y, train_size=0.75, shuffle=True, random_state=148
 )
 
 #2 Modeling
@@ -59,6 +59,8 @@ score = model.score(x_test, y_test)
 print('model.score : ', score)
 print('Best estimator : ', model.best_estimator_)
 print('Best score  :', model.best_score_)
+y_pred = model.predict(x_test)
+print('r2_score: ', r2_score(y_test, y_pred))
 
 '''
 Grid

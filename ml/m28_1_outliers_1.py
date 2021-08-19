@@ -8,7 +8,9 @@
 
 import numpy as np
 aaa = np.array([1, 2, -1000, 4, 5, 6, 7, 8, 90, 100, 500])
-
+print(aaa)
+print(aaa.shape)
+print(type(aaa))
 def outliers(data_out):
     quartile_1, q2, quartile_3 = np.percentile(data_out, [25, 50, 75])
     print('1사분위: ', quartile_1)

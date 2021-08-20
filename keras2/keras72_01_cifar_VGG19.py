@@ -1,8 +1,6 @@
-# cifar10과 100
-# trainable True/False
-# Model FC/GAP 비교
-# trainable 동결, 미동결 비교
-# fc 모델, average pooling 비교
+# cifar10 / 100
+# trainable True / False
+# FC / GAP
 
 from icecream import ic
 import numpy as np

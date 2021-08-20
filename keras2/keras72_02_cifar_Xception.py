@@ -65,23 +65,17 @@ for dt_key, dt_val in DATASETS.items():
 
             #4 Evaluate
             loss = model.evaluate(x_test, y_test, batch_size=128)
-            result = f'[{COUNT}] {dt_key}_{tf_key}_{fg_key} :: loss= {round(loss[0], 5)}, acc= {round(loss[1], 5)}'
+            result = f'[{COUNT}] {dt_key}_{tf_key}_{fg_key} :: loss= {round(loss[0], 4)}, acc= {round(loss[1], 4)}'
             ic(result)
             LOSS_ACC_LS.append(result)
             COUNT = COUNT + 1
 
-ic('================= RESULTS ==================')
+print('Xception')
+
 for i in LOSS_ACC_LS:
     print(i)
 
 '''
-VGG19
-[1] cifar_10_True__Flatten :: loss= 0.85997, acc= 0.78009
-[2] cifar_10_True__GAP__2D :: loss= 0.85685, acc= 0.78860
-[3] cifar_10_False_Flatten :: loss= 1.05969, acc= 0.64170
-[4] cifar_10_False_GAP__2D :: loss= 1.06402, acc= 0.63800
-[5] cifar100_True__Flatten :: loss= 3.24983, acc= 0.31940
-[6] cifar100_True__GAP__2D :: loss= 3.30694, acc= 0.30410
-[7] cifar100_False_Flatten :: loss= 2.41855, acc= 0.38519
-[8] cifar100_False_GAP__2D :: loss= 2.39916, acc= 0.39259
+Xception
+
 '''

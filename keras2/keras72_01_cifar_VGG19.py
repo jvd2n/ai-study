@@ -68,7 +68,7 @@ for dt_key, dt_val in DATASETS.items():
             LOSS_ACC_LS.append(result)
             COUNT = COUNT + 1
 
-ic('================= RESULTS ==================')
+print('VGG19')
 for i in LOSS_ACC_LS:
     print(i)
 

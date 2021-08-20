@@ -36,8 +36,8 @@ ic(x_train[:, 0])
 outliers_idx = []
 def outliers(data_out):
     for i in range(0, data_out.shape[1]):
-        data_out = np.delete(data_out, np.where(data_out == [0, 0, 0]), axis=0)
-        quartile_1, q2, quartile_3 = np.percentile(data_out[:, i], [25, 50, 75])
+        data_out_qq = np.delete(data_out, np.where(data_out == [0, 0, 0]), axis=0)
+        quartile_1, q2, quartile_3 = np.percentile(data_out_qq[:, i], [25, 50, 75])
         print('\n', '*'*20, i+1, '열 /', data_header[i], '*'*20)
         print('1사분위: ', quartile_1)
         print('q2 :', q2)

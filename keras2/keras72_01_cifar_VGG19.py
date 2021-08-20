@@ -10,7 +10,8 @@ import matplotlib.pyplot as plt
 from tensorflow.keras.datasets import cifar10, cifar100
 from sklearn.preprocessing import StandardScaler
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.applications import VGG16, VGG19
+from tensorflow.keras.applications import VGG19, Xception, ResNet50, ResNet101, inception_v3, InceptionResNetV2
+from tensorflow.keras.applications import DenseNet121, MobileNetV2, NASNetMobile, EfficientNetB0
 from tensorflow.keras.layers import Dense, Conv2D, Flatten, MaxPool2D, GlobalAveragePooling2D
 from tensorflow.keras.optimizers import Adam, Adagrad, Adamax, Adadelta, RMSprop, SGD, Nadam
 from tensorflow.keras.callbacks import EarlyStopping
@@ -35,14 +36,15 @@ for dt_key, dt_val in DATASETS.items():
 
     x_train = x_train.reshape(-1, 32, 32, 3)
     x_test = x_test.reshape(-1, 32, 32, 3)
+    
     #2 Model
     for tf_key, tf_val in TRAINABLE.items():
         for fg_key, fg_val in FLATTEN_GAP.items():
-            vgg19 = VGG19(weights='imagenet', include_top=False, input_shape=(32, 32, 3))
-            vgg19.trainable = tf_val
+            transfer_learning = VGG19(weights='imagenet', include_top=False, input_shape=(32, 32, 3))
+            transfer_learning.trainable = tf_val
 
             model = Sequential()
-            model.add(vgg19)
+            model.add(transfer_learning)
             model.add(fg_val)
             if dt_key == 'cifar10':
                 model.add(Dense(100, activation='relu'))
@@ -63,7 +65,7 @@ for dt_key, dt_val in DATASETS.items():
 
             #4 Evaluate
             loss = model.evaluate(x_test, y_test, batch_size=128)
-            result = f'[{COUNT}] {dt_key}_{tf_key}_{fg_key} :: loss= {round(loss[0], 5)}, acc= {round(loss[1], 5)}'
+            result = f'[{COUNT}] {dt_key}_{tf_key}_{fg_key} :: loss= {round(loss[0], 4)}, acc= {round(loss[1], 4)}'
             ic(result)
             LOSS_ACC_LS.append(result)
             COUNT = COUNT + 1
@@ -74,12 +76,12 @@ for i in LOSS_ACC_LS:
 
 '''
 VGG19
-[1] cifar10_True_Flatten :: loss= 0.859976053237915, acc= 0.7800999879837036
-[2] cifar10_True_GAP__2D :: loss= 0.8568546772003174, acc= 0.7886000275611877
-[3] cifar10_False_Flatten :: loss= 1.0596932172775269, acc= 0.641700029373169
-[4] cifar10_False_GAP__2D :: loss= 1.0640227794647217, acc= 0.6380000114440918
-[5] cifar100_True_Flatten :: loss= 3.2498319149017334, acc= 0.31940001249313354
-[6] cifar100_True_GAP__2D :: loss= 3.306947946548462, acc= 0.30410000681877136
-[7] cifar100_False_Flatten :: loss= 2.418550968170166, acc= 0.38519999384880066
-[8] cifar100_False_GAP__2D :: loss= 2.3991663455963135, acc= 0.39259999990463257
+[1] cifar_10_True__Flatten :: loss= 0.8599, acc= 0.7800
+[2] cifar_10_True__GAP__2D :: loss= 0.8568, acc= 0.7886
+[3] cifar_10_False_Flatten :: loss= 1.0596, acc= 0.6417
+[4] cifar_10_False_GAP__2D :: loss= 1.0640, acc= 0.6380
+[5] cifar100_True__Flatten :: loss= 3.2498, acc= 0.3194
+[6] cifar100_True__GAP__2D :: loss= 3.3069, acc= 0.3041
+[7] cifar100_False_Flatten :: loss= 2.4185, acc= 0.3851
+[8] cifar100_False_GAP__2D :: loss= 2.3991, acc= 0.3925
 '''

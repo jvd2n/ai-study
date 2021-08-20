@@ -17,8 +17,8 @@ from tensorflow.keras.callbacks import EarlyStopping
 
 COUNT = 1
 LOSS_ACC_LS = []
-DATASETS = {'cifar10': cifar10.load_data(), 'cifar100': cifar100.load_data()}
-TRAINABLE = {'True': True, 'False': False}
+DATASETS = {'cifar_10': cifar10.load_data(), 'cifar100': cifar100.load_data()}
+TRAINABLE = {'True_': True, 'False': False}
 FLATTEN_GAP = {'Flatten': Flatten(), 'GAP__2D': GlobalAveragePooling2D()}
 
 for dt_key, dt_val in DATASETS.items():
@@ -74,6 +74,12 @@ for i in LOSS_ACC_LS:
 
 '''
 VGG19
-loss: 1.0756677389144897
-accuracy: 0.6460999846458435
+[1] cifar10_True_Flatten :: loss= 0.859976053237915, acc= 0.7800999879837036
+[2] cifar10_True_GAP__2D :: loss= 0.8568546772003174, acc= 0.7886000275611877
+[3] cifar10_False_Flatten :: loss= 1.0596932172775269, acc= 0.641700029373169
+[4] cifar10_False_GAP__2D :: loss= 1.0640227794647217, acc= 0.6380000114440918
+[5] cifar100_True_Flatten :: loss= 3.2498319149017334, acc= 0.31940001249313354
+[6] cifar100_True_GAP__2D :: loss= 3.306947946548462, acc= 0.30410000681877136
+[7] cifar100_False_Flatten :: loss= 2.418550968170166, acc= 0.38519999384880066
+[8] cifar100_False_GAP__2D :: loss= 2.3991663455963135, acc= 0.39259999990463257
 '''

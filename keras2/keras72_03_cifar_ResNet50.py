@@ -1,16 +1,10 @@
-# cifar10과 100
-# trainable True/False
-# Model FC/GAP 비교
-# trainable 동결, 미동결 비교
-# fc 모델, average pooling 비교
-
 from icecream import ic
 import numpy as np
 import matplotlib.pyplot as plt
 from tensorflow.keras.datasets import cifar10, cifar100
 from sklearn.preprocessing import StandardScaler
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.applications import VGG19, Xception, ResNet50, ResNet101, inception_v3, InceptionResNetV2
+from tensorflow.keras.applications import VGG19, Xception, ResNet50, ResNet101, InceptionV3, InceptionResNetV2
 from tensorflow.keras.applications import DenseNet121, MobileNetV2, NASNetMobile, EfficientNetB0
 from tensorflow.keras.layers import Dense, Conv2D, Flatten, MaxPool2D, GlobalAveragePooling2D
 from tensorflow.keras.optimizers import Adam, Adagrad, Adamax, Adadelta, RMSprop, SGD, Nadam
@@ -76,5 +70,12 @@ for i in LOSS_ACC_LS:
 
 '''
 ResNet50
-
+[1] cifar_10_True__Flatten :: loss= 3.77893, acc= 0.2426
+[2] cifar_10_True__GAP__2D :: loss= 3.4334, acc= 0.3153
+[3] cifar_10_False_Flatten :: loss= 1.55422, acc= 0.4646
+[4] cifar_10_False_GAP__2D :: loss= 1.5433, acc= 0.4654
+[5] cifar100_True__Flatten :: loss= 5.11945, acc= 0.1296
+[6] cifar100_True__GAP__2D :: loss= 6.30556, acc= 0.1103
+[7] cifar100_False_Flatten :: loss= 3.51008, acc= 0.1991
+[8] cifar100_False_GAP__2D :: loss= 3.51575, acc= 0.1967
 '''

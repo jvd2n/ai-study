@@ -1,16 +1,10 @@
-# cifar10과 100
-# trainable True/False
-# Model FC/GAP 비교
-# trainable 동결, 미동결 비교
-# fc 모델, average pooling 비교
-
 from icecream import ic
 import numpy as np
 import matplotlib.pyplot as plt
 from tensorflow.keras.datasets import cifar10, cifar100
 from sklearn.preprocessing import StandardScaler
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.applications import VGG19, Xception, ResNet50, ResNet101, inception_v3, InceptionResNetV2
+from tensorflow.keras.applications import VGG19, Xception, ResNet50, ResNet101, InceptionV3, InceptionResNetV2
 from tensorflow.keras.applications import DenseNet121, MobileNetV2, NASNetMobile, EfficientNetB0
 from tensorflow.keras.layers import Dense, Conv2D, Flatten, MaxPool2D, GlobalAveragePooling2D
 from tensorflow.keras.optimizers import Adam, Adagrad, Adamax, Adadelta, RMSprop, SGD, Nadam

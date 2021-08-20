@@ -19,7 +19,7 @@ COUNT = 1
 LOSS_ACC_LS = []
 DATASETS = {'cifar10': cifar10.load_data(), 'cifar100': cifar100.load_data()}
 TRAINABLE = {'True': True, 'False': False}
-FLATTEN_GAP = {'Flatten': Flatten(), 'GAP2D': GlobalAveragePooling2D()}
+FLATTEN_GAP = {'Flatten': Flatten(), 'GAP__2D': GlobalAveragePooling2D()}
 
 for dt_key, dt_val in DATASETS.items():
     #1 Data

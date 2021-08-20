@@ -35,6 +35,7 @@ for dt_key, dt_val in DATASETS.items():
     for tf_key, tf_val in TRAINABLE.items():
         for fg_key, fg_val in FLATTEN_GAP.items():
             transfer_learning = VGG19(weights='imagenet', include_top=False, input_shape=(32, 32, 3))
+            # include_top=False -> fully connected layer가 사라지므로 데이터에 맞게 커스터마이징 가능
             transfer_learning.trainable = tf_val
 
             model = Sequential()

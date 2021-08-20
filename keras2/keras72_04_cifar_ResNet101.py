@@ -69,5 +69,13 @@ for i in LOSS_ACC_LS:
     print(i)
 
 '''
-
+ResNet101
+[1] cifar_10_True__Flatten :: loss= 5.55, acc= 0.2331
+[2] cifar_10_True__GAP__2D :: loss= 7.2075, acc= 0.1091
+[3] cifar_10_False_Flatten :: loss= 1.7259, acc= 0.3876
+[4] cifar_10_False_GAP__2D :: loss= 1.7347, acc= 0.3806
+[5] cifar100_True__Flatten :: loss= 5.026, acc= 0.0942
+[6] cifar100_True__GAP__2D :: loss= 3.0132, acc= 0.4905
+[7] cifar100_False_Flatten :: loss= 3.8398, acc= 0.1362
+[8] cifar100_False_GAP__2D :: loss= 3.8494, acc= 0.1355
 '''

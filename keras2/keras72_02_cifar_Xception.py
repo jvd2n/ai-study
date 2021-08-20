@@ -1,6 +1,7 @@
 from icecream import ic
 import numpy as np
 import matplotlib.pyplot as plt
+import tensorflow as tf
 from tensorflow.keras.datasets import cifar10, cifar100
 from sklearn.preprocessing import StandardScaler
 from tensorflow.keras.models import Sequential
@@ -9,6 +10,7 @@ from tensorflow.keras.applications import DenseNet121, MobileNetV2, NASNetMobile
 from tensorflow.keras.layers import Dense, Conv2D, Flatten, MaxPool2D, GlobalAveragePooling2D
 from tensorflow.keras.optimizers import Adam, Adagrad, Adamax, Adadelta, RMSprop, SGD, Nadam
 from tensorflow.keras.callbacks import EarlyStopping
+from tensorflow.python.ops.image_ops_impl import resize_nearest_neighbor
 
 COUNT = 1
 LOSS_ACC_LS = []
@@ -19,22 +21,37 @@ FLATTEN_GAP = {'Flatten': Flatten(), 'GAP__2D': GlobalAveragePooling2D()}
 for dt_key, dt_val in DATASETS.items():
     #1 Data
     (x_train, y_train), (x_test, y_test) = dt_val
-    x_train = x_train.reshape(-1, 32 * 32 * 3)
-    x_test = x_test.reshape(-1, 32 * 32 * 3)
-    # ic(x_train.shape, x_test.shape)
-    # ic(np.unique(y_train))
+    # x_train = x_train.reshape(-1, 32 * 32 * 3)
+    # x_test = x_test.reshape(-1, 32 * 32 * 3)
+    # # ic(x_train.shape, x_test.shape)
+    # # ic(np.unique(y_train))
 
-    scaler = StandardScaler()
-    x_train = scaler.fit_transform(x_train)
-    x_test = scaler.transform(x_test)
+    # scaler = StandardScaler()
+    # x_train = scaler.fit_transform(x_train)
+    # x_test = scaler.transform(x_test)
 
-    x_train = x_train.reshape(-1, 32, 32, 3)
-    x_test = x_test.reshape(-1, 32, 32, 3)
+    # x_train = x_train.reshape(-1, 32, 32, 3)
+    # x_test = x_test.reshape(-1, 32, 32, 3)
     
+    # y_train = y_train.reshape(x_train.shape[0], -1)
+    # y_test = y_test.reshape(x_test.shape[0], -1)
+    
+    x_train = tf.image.resize(
+        x_train, [80, 80], method='nearest', preserve_aspect_ratio=False,
+        antialias=False, name=None
+    )
+    x_test = tf.image.resize(
+        x_test, [80, 80], method='nearest', preserve_aspect_ratio=False,
+        antialias=False, name=None
+    )
+    
+    ic(x_train.shape, x_test.shape)
+    ic(y_train.shape, y_test.shape)
+
     #2 Model
     for tf_key, tf_val in TRAINABLE.items():
         for fg_key, fg_val in FLATTEN_GAP.items():
-            transfer_learning = Xception(weights='imagenet', include_top=False, input_shape=(32, 32, 3))
+            transfer_learning = Xception(weights='imagenet', include_top=False, input_shape=(80, 80, 3))
             transfer_learning.trainable = tf_val
 
             model = Sequential()
@@ -54,7 +71,7 @@ for dt_key, dt_val in DATASETS.items():
             model.compile(loss='sparse_categorical_crossentropy',
                         optimizer=opt, metrics=['acc'])
             es = EarlyStopping(monitor='val_loss', patience=4, mode='min', verbose=1)
-            model.fit(x_train, y_train, epochs=20, batch_size=512,
+            model.fit(x_train, y_train, epochs=20, batch_size=256,
                     verbose=1, validation_split=0.25, callbacks=[es])
 
             #4 Evaluate
@@ -71,5 +88,12 @@ for i in LOSS_ACC_LS:
 
 '''
 Xception
-
+[1] cifar_10_True__Flatten :: loss= 0.4766, acc= 0.8886
+[2] cifar_10_True__GAP__2D :: loss= 0.4937, acc= 0.8956
+[3] cifar_10_False_Flatten :: loss= 1.6288, acc= 0.4616
+[4] cifar_10_False_GAP__2D :: loss= 1.6028, acc= 0.4467
+[5] cifar100_True__Flatten :: loss= 1.8603, acc= 0.6412
+[6] cifar100_True__GAP__2D :: loss= 1.5624, acc= 0.6453
+[7] cifar100_False_Flatten :: loss= 4.6053, acc= 0.01
+[8] cifar100_False_GAP__2D :: loss= 3.8317, acc= 0.1159
 '''

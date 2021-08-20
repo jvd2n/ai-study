@@ -26,8 +26,8 @@ for dt_key, dt_val in DATASETS.items():
     (x_train, y_train), (x_test, y_test) = dt_val
     x_train = x_train.reshape(-1, 32 * 32 * 3)
     x_test = x_test.reshape(-1, 32 * 32 * 3)
-    # ic(np.unique(y_train))
     # ic(x_train.shape, x_test.shape)
+    # ic(np.unique(y_train))
 
     scaler = StandardScaler()
     x_train = scaler.fit_transform(x_train)
@@ -57,13 +57,13 @@ for dt_key, dt_val in DATASETS.items():
             opt = Adam()
             model.compile(loss='sparse_categorical_crossentropy',
                         optimizer=opt, metrics=['acc'])
-            es = EarlyStopping(monitor='val_loss', patience=5, mode='min', verbose=1)
-            model.fit(x_train, y_train, epochs=30, batch_size=512,
+            es = EarlyStopping(monitor='val_loss', patience=4, mode='min', verbose=1)
+            model.fit(x_train, y_train, epochs=20, batch_size=512,
                     verbose=1, validation_split=0.25, callbacks=[es])
 
             #4 Evaluate
             loss = model.evaluate(x_test, y_test, batch_size=128)
-            result = f'[{COUNT}] {dt_key}_{tf_key}_{fg_key} :: loss= {loss[0]}, acc= {loss[1]}'
+            result = f'[{COUNT}] {dt_key}_{tf_key}_{fg_key} :: loss= {round(loss[0], 5)}, acc= {round(loss[1], 5)}'
             ic(result)
             LOSS_ACC_LS.append(result)
             COUNT = COUNT + 1

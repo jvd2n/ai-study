@@ -82,7 +82,6 @@ for dt_key, dt_val in DATASETS.items():
             COUNT = COUNT + 1
 
 print('Xception')
-
 for i in LOSS_ACC_LS:
     print(i)
 

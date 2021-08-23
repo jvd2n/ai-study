@@ -7,7 +7,7 @@ from sklearn.preprocessing import StandardScaler
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.applications import VGG19, Xception, ResNet50, ResNet101, InceptionV3, InceptionResNetV2
 from tensorflow.keras.applications import DenseNet121, MobileNetV2, NASNetMobile, EfficientNetB0
-from tensorflow.keras.layers import Dense, Conv2D, Flatten, MaxPool2D, GlobalAveragePooling2D
+from tensorflow.keras.layers import Dense, Conv2D, Flatten, MaxPool2D, GlobalAveragePooling2D, UpSampling2D
 from tensorflow.keras.optimizers import Adam, Adagrad, Adamax, Adadelta, RMSprop, SGD, Nadam
 from tensorflow.keras.callbacks import EarlyStopping
 
@@ -50,15 +50,16 @@ for dt_key, dt_val in DATASETS.items():
     #2 Model
     for tf_key, tf_val in TRAINABLE.items():
         for fg_key, fg_val in FLATTEN_GAP.items():
-            transfer_learning = NASNetMobile(weights='imagenet', include_top=True, input_shape=(224, 224, 3))
+            transfer_learning = NASNetMobile(weights='imagenet', include_top=False, input_shape=(224, 224, 3))
             transfer_learning.trainable = tf_val
 
             model = Sequential()
+            # model.add(UpSampling2D((7, 7), input_shape=(32, 32, 3)))
             model.add(transfer_learning)
             model.add(fg_val)
             if dt_key == 'cifar10':
                 # model.add(Dense(100, activation='relu'))
-                # model.add(Dense(50, activation='relu'))
+                model.add(Dense(50, activation='relu'))
                 model.add(Dense(10, activation='softmax'))
             else:
                 # model.add(Dense(200, activation='relu'))
@@ -70,11 +71,11 @@ for dt_key, dt_val in DATASETS.items():
             model.compile(loss='sparse_categorical_crossentropy',
                         optimizer=opt, metrics=['acc'])
             es = EarlyStopping(monitor='val_loss', patience=4, mode='min', verbose=1)
-            model.fit(x_train, y_train, epochs=20, batch_size=512,
+            model.fit(x_train, y_train, epochs=20, batch_size=64,
                     verbose=1, validation_split=0.25, callbacks=[es])
 
             #4 Evaluate
-            loss = model.evaluate(x_test, y_test, batch_size=128)
+            loss = model.evaluate(x_test, y_test, batch_size=64)
             result = f'[{COUNT}] {dt_key}_{tf_key}_{fg_key} :: loss= {round(loss[0], 4)}, acc= {round(loss[1], 4)}'
             ic(result)
             LOSS_ACC_LS.append(result)
@@ -86,4 +87,13 @@ for i in LOSS_ACC_LS:
 
 '''
 When setting `include_top=True` and loading `imagenet` weights, `input_shape` should be (224, 224, 3).
+NASNetMobile
+[1] cifar_10_True__Flatten :: loss= 5.0843, acc= 0.1017
+[2] cifar_10_True__GAP__2D :: loss= 5.7528, acc= 0.2326
+[3] cifar_10_False_Flatten :: loss= 11.326, acc= 0.3525
+[4] cifar_10_False_GAP__2D :: loss= 1.7993, acc= 0.3571
+[5] cifar100_True__Flatten :: loss= 5.2384, acc= 0.0437
+[6] cifar100_True__GAP__2D :: loss= 5.8548, acc= 0.1777
+[7] cifar100_False_Flatten :: loss= 41.781, acc= 0.1111
+[8] cifar100_False_GAP__2D :: loss= 4.0099, acc= 0.1358
 '''

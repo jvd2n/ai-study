@@ -1,5 +1,3 @@
-from enum import auto
-from typing import Sequence
 import numpy as np
 from tensorflow.keras.datasets import mnist
 
@@ -22,7 +20,6 @@ def autoencoder2(hidden_layer_size): # 딥하게 구성한 오토인코더
     model = Sequential()
     model.add(Dense(units=hidden_layer_size, input_shape=(784,),
                     activation='relu'))
-    model.add(Dense(units=1600, activation='relu'))
     model.add(Dense(units=1600, activation='relu'))
     model.add(Dense(units=1600, activation='relu'))
     model.add(Dense(units=1000, activation='relu'))

@@ -11,8 +11,8 @@ from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Dense, Input
 
 input_img = Input(shape=(784,))
-# encoded = Dense(64, activation='relu')(input_img)
-encoded = Dense(1064, activation='relu')(input_img)
+encoded = Dense(64, activation='relu')(input_img)
+# encoded = Dense(1064, activation='relu')(input_img)
 
 decoded = Dense(784, activation='sigmoid')(encoded)
 # decoded = Dense(784, activation='relu')(encoded)

@@ -8,7 +8,7 @@ y = datasets.target
 
 print(x.shape, y.shape) # (506, 13) (506,)
 
-x = tf.compat.v1.placehloder(tf.float32, shape=[None, 13])
+x = tf.compat.v1.placeholder(tf.float32, shape=[None, 13])
 y = tf.compat.v1.placeholder(tf.float32, shape=[None, 1])
 
 # results -> r2_score

@@ -147,4 +147,5 @@ print('Training Complete')
 prediction = tf.equal(tf.argmax(hypothesis, 1), tf.argmax(y, 1))
 accuracy = tf.reduce_mean(tf.cast(prediction, tf.float32))
 print('Acc: ', sess.run(accuracy, feed_dict={x:x_test, y:y_test}))
+
 # Acc:  0.9883

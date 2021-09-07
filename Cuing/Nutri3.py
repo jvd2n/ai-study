@@ -16,7 +16,6 @@ class Nutrition(object):
     new_food_gram = []
     new_food_kcal = []
     final_food_nut = []
-    
 
     def scrap_name(self):
 

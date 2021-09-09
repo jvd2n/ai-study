@@ -69,7 +69,7 @@ class Nutrition(object):
         food_ls = []
         unique_ls = []  # 유니크 값을 확인하기 위한 배열
 
-        for key, value in self.dict.items():  # 크롤링 한 음식 가지수만큼 반복
+        for key, value in self.dict.items():  # 크롤링한 음식 가지수만큼 반복
             # 1회 제공량이나 칼로리부터는 '-'문자열이 없고, ','로 구분 돼서 그 전까지 분리 ['', '탄수화물:23g', '단백질:123g']
             nut_tr = self.dict[key].split('-')[:-1]
             nut_tr = ' '.join(nut_tr).split()  # 앞 공백 요소 제거

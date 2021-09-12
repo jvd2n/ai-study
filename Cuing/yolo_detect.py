@@ -53,3 +53,4 @@ def main(img_path):     # 이미지 전처리
 if __name__ == '__main__':
     img_path = 'C:/Users/bit/yolov4/tensorflow-yolov4-tflite/data/table.jpg'
     main(img_path)
+

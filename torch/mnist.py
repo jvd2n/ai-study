@@ -50,7 +50,6 @@ def train(args, model, device, train_loader, optimizer, epoch):
             if args.dry_run:
                 break
 
-
 def test(model, device, test_loader):
     model.eval()
     test_loss = 0

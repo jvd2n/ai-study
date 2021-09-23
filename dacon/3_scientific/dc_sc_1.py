@@ -46,7 +46,7 @@ plt.imshow(sample_img)
 # plt.show()
 
 device = torch.device("cuda:0")
-BATCH_SIZE = 64
+BATCH_SIZE = 48
 EPOCHS = 25
 num_layers = 1
 dropout_rate = 0.2
@@ -141,9 +141,9 @@ train_dataset = CustomDataset(train_imgs, train_seqs, train_labels)
 val_dataset = CustomDataset(val_imgs, val_seqs, val_labels)
 
 train_dataloader = torch.utils.data.DataLoader(
-    train_dataset, batch_size=BATCH_SIZE, num_workers=0, shuffle=True)
+    train_dataset, batch_size=BATCH_SIZE, num_workers=8, shuffle=True)
 val_dataloader = torch.utils.data.DataLoader(
-    val_dataset, batch_size=BATCH_SIZE, num_workers=0, shuffle=True)
+    val_dataset, batch_size=BATCH_SIZE, num_workers=8, shuffle=True)
 # train_dataloader = torch.tensor(train_dataset.values).float()
 # val_dataloader = torch.tensor(val_dataset.values).float()
 

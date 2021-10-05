@@ -7,5 +7,6 @@ data/
 .idea/
 *.zip
 *.csv
+*.json
 *.h5
 tmp/

@@ -55,29 +55,29 @@ def solution_model():
     with open('sunspots.csv') as csvfile:
       reader = csv.reader(csvfile, delimiter=',')
       next(reader)
-      for row in reader:
-        sunspots.append(# YOUR CODE HERE)
-        time_step.append(# YOUR CODE HERE)
+      # for row in reader:
+      #   sunspots.append(# YOUR CODE HERE)
+      #   time_step.append(# YOUR CODE HERE)
 
-    series = # YOUR CODE HERE
-
-    # DO NOT CHANGE THIS CODE
-    # This is the normalization function
-    min = np.min(series)
-    max = np.max(series)
-    series -= min
-    series /= max
-    time = np.array(time_step)
+    # series = # YOUR CODE HERE
+    #
+    # # DO NOT CHANGE THIS CODE
+    # # This is the normalization function
+    # min = np.min(series)
+    # max = np.max(series)
+    # series -= min
+    # series /= max
+    # time = np.array(time_step)
 
     # The data should be split into training and validation sets at time step 3000
     # DO NOT CHANGE THIS CODE
     split_time = 3000
 
 
-    time_train = # YOUR CODE HERE
-    x_train = # YOUR CODE HERE
-    time_valid = # YOUR CODE HERE
-    x_valid = # YOUR CODE HERE
+    # time_train = # YOUR CODE HERE
+    # x_train = # YOUR CODE HERE
+    # time_valid = # YOUR CODE HERE
+    # x_valid = # YOUR CODE HERE
 
     # DO NOT CHANGE THIS CODE
     window_size = 30
@@ -85,7 +85,7 @@ def solution_model():
     shuffle_buffer_size = 1000
 
 
-    train_set = windowed_dataset(x_train, window_size=window_size, batch_size=batch_size, shuffle_buffer=shuffle_buffer_size)
+    # train_set = windowed_dataset(x_train, window_size=window_size, batch_size=batch_size, shuffle_buffer=shuffle_buffer_size)
 
 
     model = tf.keras.models.Sequential([

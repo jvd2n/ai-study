@@ -5,3 +5,6 @@ _output/
 bert_ckpt/
 data/
 .idea/
+*.zip
+*.csv
+*.h5

@@ -8,3 +8,4 @@ data/
 *.zip
 *.csv
 *.h5
+tmp/

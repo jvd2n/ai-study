@@ -10,3 +10,4 @@ data/
 *.json
 *.h5
 tmp/
+tf_certificate/
